@@ -1,0 +1,110 @@
+@page "/clients/create"
+@using System.ComponentModel.DataAnnotations
+@using System.Text
+@using System.Text.Json
+@inject HttpClient Client;
+@inject NavigationManager NavManager
+
+<h3 style="text-align:center; margin-top: 20px;">Create New Client</h3>
+
+<style>
+    .form-container {
+        max-width: 500px;
+        margin: 40px auto;
+        background-color: #f5f5f5;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        font-family: sans-serif;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 6px;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 16px;
+    }
+
+    .submit-button {
+        width: 100%;
+        padding: 12px;
+        font-size: 18px;
+        background-color: #0078d4;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    .submit-button:hover {
+        background-color: #005fa3;
+    }
+</style>
+
+<EditForm Model="@model" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-container">
+        <div class="form-group">
+            <label>Name</label>
+            <InputText @bind-Value="model.Name" />
+        </div>
+        <div class="form-group">
+            <label>Surname</label>
+            <InputText @bind-Value="model.Surname" />
+        </div>
+        <div class="form-group">
+            <label>Contact Number</label>
+            <InputText @bind-Value="model.ContactNamber" />
+        </div>
+        <div class="form-group">
+            <label>Government ID</label>
+            <InputText @bind-Value="model.GovernmentId" />
+        </div>
+        <div class="form-group">
+            <label>Address</label>
+            <InputText @bind-Value="model.Address" />
+        </div>
+        <button type="submit" class="submit-button">Submit</button>
+    </div>
+</EditForm>
+
+@code {
+    private CreateClientModel model = new();
+
+    private async Task HandleValidSubmit()
+    {
+        var json = JsonSerializer.Serialize(model);
+        var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+        var response = await Client.PostAsync("/api/clients/create", httpContent);
+        if(response.IsSuccessStatusCode)
+            NavManager.NavigateTo($"/createorder/{await response.Content.ReadAsStringAsync()}");
+    }
+}
+
+@code {
+    public class CreateClientModel
+    {
+        [Required]
+        public string Name { get; set; }
+        public string? Surname { get; set; }
+        public string? ContactNamber { get; set; }
+        [Required]
+        public string GovernmentId { get; set; }
+        [Required]
+        public string Address { get; set; }
+    }
+}

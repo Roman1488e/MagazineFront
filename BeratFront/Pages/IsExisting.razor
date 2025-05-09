@@ -1,0 +1,49 @@
+@page "/clients"
+@inject NavigationManager NavigationManager
+
+<style>
+    html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        font-family: sans-serif;
+    }
+
+    .vertical-grid {
+        display: grid;
+        grid-template-rows: 1fr 1fr;
+        height: 100vh;
+        width: 100vw;
+    }
+
+    .half-tile {
+        background-color: #0078d4;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 36px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    .half-tile:hover {
+        background-color: #005fa3;
+    }
+</style>
+
+<div class="vertical-grid">
+    <div class="half-tile" @onclick="NavigateToAddClient">
+        New Client
+    </div>
+    <div class="half-tile" @onclick="NavigateToFindClient">
+        Old Client
+    </div>
+</div>
+
+@code {
+    void NavigateToAddClient() => NavigationManager.NavigateTo("/clients/create");
+    void NavigateToFindClient() => NavigationManager.NavigateTo("/findclient");
+}
+

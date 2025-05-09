@@ -1,0 +1,61 @@
+{
+  "Files": [
+    {
+      "Id": "/home/tryhackme/RiderProjects/BeratFront/BeratFront/bin/Debug/net8.0/wwwroot/_framework/blazor.webassembly.js",
+      "PackagePath": "staticwebassets/_framework/blazor.webassembly.js"
+    },
+    {
+      "Id": "/home/tryhackme/RiderProjects/BeratFront/BeratFront/obj/Debug/net8.0/compressed/2bgfzaycdn.gz",
+      "PackagePath": "staticwebassets/_framework/blazor.webassembly.js.gz"
+    },
+    {
+      "Id": "/home/tryhackme/RiderProjects/BeratFront/BeratFront/obj/Debug/net8.0/scopedcss/bundle/BeratFront.styles.css",
+      "PackagePath": "staticwebassets/BeratFront.styles.css"
+    },
+    {
+      "Id": "/home/tryhackme/RiderProjects/BeratFront/BeratFront/wwwroot/css/app.css",
+      "PackagePath": "staticwebassets/css/app.css"
+    },
+    {
+      "Id": "/home/tryhackme/RiderProjects/BeratFront/BeratFront/wwwroot/css/bootstrap/bootstrap.min.css",
+      "PackagePath": "staticwebassets/css/bootstrap/bootstrap.min.css"
+    },
+    {
+      "Id": "/home/tryhackme/RiderProjects/BeratFront/BeratFront/wwwroot/css/bootstrap/bootstrap.min.css.map",
+      "PackagePath": "staticwebassets/css/bootstrap/bootstrap.min.css.map"
+    },
+    {
+      "Id": "/home/tryhackme/RiderProjects/BeratFront/BeratFront/wwwroot/favicon.png",
+      "PackagePath": "staticwebassets/favicon.png"
+    },
+    {
+      "Id": "/home/tryhackme/RiderProjects/BeratFront/BeratFront/wwwroot/icon-192.png",
+      "PackagePath": "staticwebassets/icon-192.png"
+    },
+    {
+      "Id": "/home/tryhackme/RiderProjects/BeratFront/BeratFront/wwwroot/index.html",
+      "PackagePath": "staticwebassets/index.html"
+    },
+    {
+      "Id": "/home/tryhackme/RiderProjects/BeratFront/BeratFront/wwwroot/sample-data/weather.json",
+      "PackagePath": "staticwebassets/sample-data/weather.json"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.BeratFront.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.build.BeratFront.props",
+      "PackagePath": "build\\BeratFront.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildMultiTargeting.BeratFront.props",
+      "PackagePath": "buildMultiTargeting\\BeratFront.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.BeratFront.props",
+      "PackagePath": "buildTransitive\\BeratFront.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

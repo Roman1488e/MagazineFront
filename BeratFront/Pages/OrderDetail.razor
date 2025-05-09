@@ -1,0 +1,107 @@
+@page "/orders/detail/{OrderId:guid}"
+@inject HttpClient Http
+
+<h3 style="text-align:center; margin-top: 20px;">Order Details</h3>
+
+@if (order == null)
+{
+    <p style="text-align:center;">Loading...</p>
+}
+else
+{
+    <div style="width: 90%; margin: auto; font-family: sans-serif;">
+        <h4>Order Info</h4>
+        <ul>
+            <li><b>Order #:</b> @order.OrderNumber</li>
+            <li><b>Customer:</b> @order.CustomerFullName</li>
+            <li><b>Product:</b> @order.ProductName</li>
+            <li><b>Order Date:</b> @order.OrderDate.ToShortDateString()</li>
+            <li><b>Reminder Date:</b> @order.ReminderDate.ToShortDateString()</li>
+            <li><b>Total Price:</b> @order.TotalPrice.ToString("C")</li>
+            <li><b>Paid Amount:</b> @order.PaidAmount.ToString("C")</li>
+            <li><b>Is Paid:</b> @(order.IsPaid ? "Yes" : "No")</li>
+            <li><b>Is Reminding:</b> @(order.IsReminding ? "Yes" : "No")</li>
+        </ul>
+
+        @if (order.Debt != null)
+        {
+            <h4>Debt Info</h4>
+            <ul>
+                <li><b>Amount:</b> @order.Debt.Amount.ToString("C")</li>
+                <li><b>Created:</b> @order.Debt.CreationDate.ToShortDateString()</li>
+                <li><b>Last Payment:</b> @order.Debt.LastPaymentDate.ToShortDateString()</li>
+                <li><b>Last Payment Amount:</b> @order.Debt.LastPaymentAmount.ToString("C")</li>
+            </ul>
+        }
+
+        @if (order.PaymentHistory is not null && order.PaymentHistory.Any())
+        {
+            <h4>Payment History</h4>
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background-color: #0078d4; color: white;">
+                        <th style="padding: 10px; border: 1px solid #ccc;">Date</th>
+                        <th style="padding: 10px; border: 1px solid #ccc;">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var payment in order.PaymentHistory)
+                    {
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #ccc;">@payment.PaymentDate.ToShortDateString()</td>
+                            <td style="padding: 10px; border: 1px solid #ccc;">@payment.PaymentAmount.ToString("C")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No payment history available.</p>
+        }
+    </div>
+}
+
+@code {
+    [Parameter]
+    public Guid OrderId { get; set; }
+
+    private OrderDetailDto? order;
+
+    protected override async Task OnInitializedAsync()
+    {
+        order = await Http.GetFromJsonAsync<OrderDetailDto>($"/api/order/{OrderId}");
+    }
+
+    public class OrderDetailDto
+    {
+        public Guid OrderId { get; set; }
+        public Guid ClientId { get; set; }
+        public int OrderNumber { get; set; }
+        public string ProductName { get; set; } = string.Empty;
+        public string CustomerFullName { get; set; } = string.Empty;
+        public bool IsReminding { get; set; }
+        public bool IsPaid { get; set; }
+        public DateTime OrderDate { get; set; }
+        public DateTime ReminderDate { get; set; }
+        public decimal TotalPrice { get; set; }
+        public decimal PaidAmount { get; set; }
+        public DebtModel? Debt { get; set; }
+        public List<PaymentModel>? PaymentHistory { get; set; }
+    }
+
+    public class DebtModel
+    {
+        public decimal Amount { get; set; }
+        public DateTime CreationDate { get; set; }
+        public DateTime LastPaymentDate { get; set; }
+        public decimal LastPaymentAmount { get; set; }
+    }
+
+    public class PaymentModel
+    {
+        public Guid OrderId { get; set; }
+        public DateTime PaymentDate { get; set; }
+        public decimal PaymentAmount { get; set; }
+    }
+}

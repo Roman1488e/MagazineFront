@@ -1,0 +1,64 @@
+@page "/statistics"
+@inject HttpClient Http
+
+<h3 style="text-align:center; margin-top: 20px;">📊 Payment Statistics</h3>
+
+@if (statistic == null)
+{
+    <p style="text-align:center;">Loading...</p>
+}
+else
+{
+    <div style="display: flex; justify-content: center; gap: 30px; margin-top: 40px;">
+        <div class="card">
+            <h4>💰 Earned Today</h4>
+            <p>@statistic.EarnedToday.ToString("C")</p>
+        </div>
+        <div class="card">
+            <h4>📅 Earned This Month</h4>
+            <p>@statistic.EarnedinMounth.ToString("C")</p>
+        </div>
+        <div class="card">
+            <h4>📈 Total Earnings</h4>
+            <p>@statistic.EarnedForAllTime.ToString("C")</p>
+        </div>
+    </div>
+}
+
+<style>
+    .card {
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        background-color: #f9f9f9;
+        text-align: center;
+        min-width: 200px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .card h4 {
+        margin-bottom: 10px;
+        color: #0078d4;
+    }
+
+    .card p {
+        font-size: 24px;
+        font-weight: bold;
+    }
+</style>
+
+@code {
+    private PaymentStatisticDto? statistic;
+
+    protected override async Task OnInitializedAsync()
+    {
+        statistic = await Http.GetFromJsonAsync<PaymentStatisticDto>("/api/paymenthistory/statistic");
+    }
+
+    public class PaymentStatisticDto
+    {
+        public decimal EarnedinMounth { get; set; }
+        public decimal EarnedToday { get; set; }
+        public decimal EarnedForAllTime { get; set; }
+    }
+}

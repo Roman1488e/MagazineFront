@@ -1,0 +1,94 @@
+@page "/createorder/{CustomerId:guid}"
+@inject HttpClient Http
+@inject NavigationManager Nav
+
+<h3 style="text-align:center; margin-top: 20px;">Create Order</h3>
+
+<style>
+    .form-container {
+        max-width: 500px;
+        margin: auto;
+        padding: 20px;
+        font-family: sans-serif;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 10px;
+        margin-top: 8px;
+        margin-bottom: 16px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+    }
+
+    label {
+        font-weight: bold;
+    }
+
+    .submit-btn {
+        background-color: #0078d4;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    .submit-btn:hover {
+        background-color: #005fa3;
+    }
+</style>
+
+<div class="form-container">
+    <EditForm Model="orderModel" OnValidSubmit="HandleSubmit">
+        <DataAnnotationsValidator />
+
+        <label>Product Name</label>
+        <InputText @bind-Value="orderModel.ProductName" />
+
+        <label>Total Price</label>
+        <InputNumber @bind-Value="orderModel.TotalPrice" />
+
+        <label>Paid Amount</label>
+        <InputNumber @bind-Value="orderModel.PaidAmount" />
+
+        <label>Remind In (Months)</label>
+        <InputNumber @bind-Value="orderModel.RemindInMonths" />
+
+        <button type="submit" class="submit-btn">Submit Order</button>
+    </EditForm>
+</div>
+
+@code {
+    [Parameter] public Guid CustomerId { get; set; }
+
+    private CreateOrderModel orderModel = new();
+
+    protected override void OnInitialized()
+    {
+        orderModel.CustomerId = CustomerId;
+    }
+
+    private async Task HandleSubmit()
+    {
+        var response = await Http.PostAsJsonAsync("/api/order/create", orderModel);
+
+        if (response.IsSuccessStatusCode)
+        {
+            Nav.NavigateTo("/");
+        }
+        else
+        {
+            Console.WriteLine("Error creating order: " + response.StatusCode);
+        }
+    }
+
+    public class CreateOrderModel
+    {
+        public Guid CustomerId { get; set; }
+        public int RemindInMonths { get; set; }
+        public string ProductName { get; set; }
+        public decimal TotalPrice { get; set; }
+        public decimal PaidAmount { get; set; }
+    }
+}

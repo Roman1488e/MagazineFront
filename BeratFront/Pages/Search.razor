@@ -1,0 +1,232 @@
+@page "/search"
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+<h3 style="text-align:center; margin-top: 20px;">Search Data</h3>
+
+<div class="search-container">
+    <select @bind="SelectedType">
+        <option value="orders">Orders</option>
+        <option value="debts">Debts</option>
+        <option value="clients">Clients</option>
+    </select>
+
+    <InputText @bind-Value="SearchTerm" placeholder="Search..." />
+    <button @onclick="FilterData">Search</button>
+</div>
+
+@if (IsLoading)
+{
+    <p style="text-align:center;">Loading...</p>
+}
+else if (FilteredItems.Count == 0)
+{
+    <p style="text-align:center;">No data found.</p>
+}
+else
+{
+    <table class="data-table">
+        <thead>
+            <tr>
+                @foreach (var header in TableHeaders)
+                {
+                    <th>@header</th>
+                }
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in FilteredItems)
+            {
+                <tr>
+                    @foreach (var value in item.Values)
+                    {
+                        <td>@value</td>
+                    }
+                    <td>
+                        <button @onclick="() => ViewDetails(item.Id)">Details</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<style>
+    .search-container {
+        max-width: 800px;
+        margin: 20px auto;
+        display: flex;
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .search-container select,
+    .search-container input {
+        flex: 1;
+        padding: 8px;
+        font-size: 16px;
+    }
+
+    .search-container button {
+        padding: 8px 16px;
+        font-size: 16px;
+    }
+
+    .data-table {
+        margin: 20px auto;
+        width: 90%;
+        border-collapse: collapse;
+    }
+
+    .data-table th,
+    .data-table td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: left;
+    }
+
+    .data-table th {
+        background-color: #f2f2f2;
+    }
+</style>
+
+@code {
+    private string _selectedType = "orders";
+    private string SelectedType
+    {
+        get => _selectedType;
+        set
+        {
+            if (_selectedType != value)
+            {
+                _selectedType = value;
+                _ = LoadDataAsync();
+            }
+        }
+    }
+
+    private string SearchTerm { get; set; } = "";
+    private bool IsLoading = true;
+
+    private List<DisplayItem> FilteredItems = new();
+    private List<DisplayItem> AllItems = new();
+    private List<string> TableHeaders = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDataAsync();
+    }
+
+    private async Task LoadDataAsync()
+    {
+        IsLoading = true;
+
+        switch (SelectedType)
+        {
+            case "orders":
+                var orders = await Http.GetFromJsonAsync<List<OrderDto>>("/api/orders");
+                AllItems = orders.Select(o => new DisplayItem
+                {
+                    Id = o.orderId.ToString(),
+                    Values = new List<string>
+                    {
+                        o.productName,
+                        o.customerFullName,
+                        o.totalPrice.ToString("C"),
+                        o.orderDate.ToShortDateString()
+                    }
+                }).ToList();
+                TableHeaders = new() { "Product", "Customer", "Total Price", "Order Date" };
+                break;
+
+            case "debts":
+                var debts = await Http.GetFromJsonAsync<List<DebtDto>>("/api/debt/search");
+                AllItems = debts.Select(d => new DisplayItem
+                {
+                    Id = d.id.ToString(),
+                    Values = new List<string>
+                    {
+                        d.clientFullName,
+                        d.productName,
+                        d.amount.ToString("C"),
+                        d.lastPaymentDate.ToShortDateString(),
+                        d.lastPaymentAmount.ToString("C")
+                    }
+                }).ToList();
+                TableHeaders = new() { "Client", "Product", "Amount", "Last Payment Date", "Last Payment Amount" };
+                break;
+
+            case "clients":
+                var clients = await Http.GetFromJsonAsync<List<ClientDto>>("/api/clients");
+                AllItems = clients.Select(c => new DisplayItem
+                {
+                    Id = c.Id.ToString(),
+                    Values = new List<string>
+                    {
+                        c.Name,
+                        c.Surname,
+                        c.ContactNamber,
+                        c.GovernmentId,
+                        c.Address,
+                        c.DateOfRegistration.ToShortDateString()
+                    }
+                }).ToList();
+                TableHeaders = new() { "Name","Surname", "Phone", "GovId", "Address", "DateOfRegistration" };
+                break;
+        }
+
+        FilterData();
+        IsLoading = false;
+    }
+
+    private void FilterData()
+    {
+        var term = SearchTerm.Trim().ToLower();
+        FilteredItems = string.IsNullOrWhiteSpace(term)
+            ? AllItems
+            : AllItems.Where(i => i.Values.Any(v => v.ToLower().Contains(term))).ToList();
+    }
+
+    private void ViewDetails(string id)
+    {
+        NavigationManager.NavigateTo($"/{SelectedType}/detail/{id}");
+    }
+
+    private class DisplayItem
+    {
+        public string Id { get; set; } = "";
+        public List<string> Values { get; set; } = new();
+    }
+
+    private class OrderDto
+    {
+        public Guid orderId { get; set; }
+        public string productName { get; set; } = "";
+        public string customerFullName { get; set; } = "";
+        public decimal totalPrice { get; set; }
+        public DateTime orderDate { get; set; }
+    }
+
+    private class DebtDto
+    {
+        public Guid id { get; set; }
+        public string clientFullName { get; set; } = "";
+        public string productName { get; set; } = "";
+        public decimal amount { get; set; }
+        public DateTime lastPaymentDate { get; set; }
+        public decimal lastPaymentAmount { get; set; }
+    }
+
+    private class ClientDto
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public string? Surname { get; set; }
+        public string? ContactNamber { get; set; }
+        public string GovernmentId { get; set; }
+        public string Address { get; set; }
+        public DateTime DateOfRegistration { get; set; }
+    }
+}
+

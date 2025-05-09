@@ -1,0 +1,292 @@
+@page "/managedata"
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+<h3 style="text-align:center; margin-top: 20px;">Manage Orders</h3>
+
+<style>
+    .search-container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 10px;
+        font-family: sans-serif;
+        display: flex;
+        gap: 10px;
+    }
+
+    .search-container input {
+        flex: 1;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+    }
+
+    .search-container button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #0078d4;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    .search-container button:hover {
+        background-color: #005fa3;
+    }
+
+    table {
+        width: 95%;
+        margin: 0 auto 40px auto;
+        border-collapse: collapse;
+        font-family: sans-serif;
+    }
+
+    table, th, td {
+        border: 1px solid #ccc;
+    }
+
+    th, td {
+        padding: 10px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #0078d4;
+        color: white;
+    }
+
+    .details-button, .pay-button {
+        background-color: #0078d4;
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 4px;
+        display: block;
+    }
+
+    .details-button:hover, .pay-button:hover {
+        background-color: #005fa3;
+    }
+
+    .pay-input {
+        width: 80px;
+        padding: 4px;
+        margin-bottom: 4px;
+    }
+
+    .message {
+        text-align: center;
+        background-color: #dff0d8;
+        color: #3c763d;
+        padding: 10px;
+        border-radius: 6px;
+        margin: 10px auto;
+        width: 60%;
+    }
+
+    .error {
+        background-color: #f8d7da;
+        color: #842029;
+    }
+</style>
+
+<div class="search-container">
+    <InputText @bind-Value="searchTerm" placeholder="Search by customer or product..." />
+    <button @onclick="FilterOrders">Search</button>
+</div>
+
+@if (showSuccessMessage)
+{
+<div class="message">@successMessage</div>
+}
+@if (showErrorMessage)
+{
+<div class="message error">@errorMessage</div>
+}
+
+@if (filteredOrders is null)
+{
+<p style="text-align:center;">Loading orders...</p>
+}
+else if (!filteredOrders.Any())
+{
+<p style="text-align:center;">No orders found.</p>
+}
+else
+{
+<table>
+    <thead>
+    <tr>
+        <th>Order #</th>
+        <th>Product</th>
+        <th>Customer</th>
+        <th>Paid</th>
+        <th>Reminder</th>
+        <th>Date</th>
+        <th>Total</th>
+        <th>Paid</th>
+        <th>Details</th>
+        <th>Pay</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var order in filteredOrders)
+    {
+    <tr>
+        <td>@order.OrderNumber</td>
+        <td>@order.ProductName</td>
+        <td>@order.CustomerFullName</td>
+        <td>@(order.IsPaid ? "✔️" : "❌")</td>
+        <td>@order.ReminderDate.ToShortDateString()</td>
+        <td>@order.OrderDate.ToShortDateString()</td>
+        <td>@order.TotalPrice.ToString("C")</td>
+        <td>@order.PaidAmount.ToString("C")</td>
+        <td>
+            <button class="details-button" @onclick="() => ViewDetails(order.OrderId)">Details</button>
+        </td>
+        <td>
+            @if (order.Debt != null && !order.IsPaid)
+            {
+            <InputNumber @bind-Value="order.PayAmount" class="pay-input" />
+            <button class="pay-button" @onclick="() => PayDebt(order)">Pay</button>
+            <button class="pay-button" @onclick="() => PayDebt(order, true)">Pay All</button>
+            }
+            else
+            {
+            <span style="color: gray;">No Debt</span>
+            }
+        </td>
+    </tr>
+    }
+    </tbody>
+</table>
+}
+
+@code {
+private string searchTerm = string.Empty;
+private List<OrderModel>? orders;
+private List<OrderModel> filteredOrders = new();
+
+private bool showSuccessMessage = false;
+private string successMessage = "";
+
+private bool showErrorMessage = false;
+private string errorMessage = "";
+
+protected override async Task OnInitializedAsync()
+{
+orders = await Http.GetFromJsonAsync<List<OrderModel>>("/api/orders");
+orders = orders?.OrderByDescending(x => x.OrderDate).ToList();
+FilterOrders();
+}
+
+private void FilterOrders()
+{
+showSuccessMessage = false;
+showErrorMessage = false;
+
+if (orders == null) return;
+
+var term = searchTerm.Trim().ToLower();
+if (string.IsNullOrWhiteSpace(term))
+{
+filteredOrders = orders;
+}
+else
+{
+filteredOrders = orders
+.Where(o =>
+o.CustomerFullName.ToLower().Contains(term) ||
+o.ProductName.ToLower().Contains(term) ||
+o.OrderNumber.ToString().Contains(term))
+.ToList();
+}
+}
+
+private void ViewDetails(Guid orderId)
+{
+NavigationManager.NavigateTo($"/orderdetail/{orderId}");
+}
+
+private async Task PayDebt(OrderModel order, bool payAll = false)
+{
+if (order.Debt == null)
+{
+ShowError("Долг не найден.");
+return;
+}
+
+decimal amountToPay = payAll ? order.Debt.Amount : order.PayAmount;
+
+if (amountToPay <= 0)
+{
+ShowError("Сумма оплаты должна быть больше 0.");
+return;
+}
+
+if (amountToPay > order.Debt.Amount)
+{
+ShowError($"Нельзя оплатить больше чем долг: {order.Debt.Amount.ToString("C")}");
+return;
+}
+
+var response = await Http.PutAsync($"api/debt/{order.Debt.Id}/payfordebt?amount={amountToPay}", null);
+if (response.IsSuccessStatusCode)
+{
+successMessage = $"Оплата {amountToPay.ToString("C")} прошла успешно!";
+showSuccessMessage = true;
+showErrorMessage = false;
+StateHasChanged();
+
+await OnInitializedAsync();
+await Task.Delay(3000);
+showSuccessMessage = false;
+StateHasChanged();
+}
+else
+{
+ShowError("Ошибка при оплате.");
+}
+}
+
+private void ShowError(string message)
+{
+errorMessage = message;
+showErrorMessage = true;
+showSuccessMessage = false;
+StateHasChanged();
+}
+
+public class OrderModel
+{
+public Guid OrderId { get; set; }
+public Guid CustomerId { get; set; }
+public decimal PayAmount { get; set; } = 0;
+public Debt? Debt { get; set; }
+public int OrderNumber { get; set; }
+public string ProductName { get; set; } = "";
+public string CustomerFullName { get; set; } = "";
+public bool IsReminding { get; set; } = false;
+public bool IsPaid { get; set; }
+public DateTime OrderDate { get; set; }
+public DateTime ReminderDate { get; set; }
+public decimal TotalPrice { get; set; }
+public decimal PaidAmount { get; set; }
+}
+
+public class Debt
+{
+public Guid Id { get; set; }
+public decimal Amount { get; set; }
+public Guid ClientId { get; set; }
+public Guid OrderId { get; set; }
+public DateTime CreationDate { get; set; }
+public DateTime LastPaymentDate { get; set; }
+public decimal LastPaymentAmount { get; set; }
+}
+}
+

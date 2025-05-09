@@ -1,0 +1,68 @@
+﻿@page "/"
+@inject NavigationManager NavigationManager
+
+<style>
+    html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        font-family: sans-serif;
+    }
+
+    .fullscreen-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        height: 100vh;
+        width: 100vw;
+    }
+
+    .tile {
+        background-color: #0078d4;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        border: 1px solid #ffffff33;
+    }
+
+    .tile:hover {
+        background-color: #005fa3;
+    }
+
+    .tile .icon {
+        font-size: 64px;
+        margin-bottom: 10px;
+    }
+</style>
+
+<div class="fullscreen-grid">
+    <div class="tile" @onclick="NavigateToCreateOrder">
+        <span class="icon">➕</span>
+        <span>New Order</span>
+    </div>
+    <div class="tile" @onclick="NavigateToStatistics">
+        <span class="icon">📊</span>
+        <span>Statistics</span>
+    </div>
+    <div class="tile" @onclick="NavigateToManage">
+        <span class="icon">💰</span>
+        <span>Manage Data</span>
+    </div>
+    <div class="tile" @onclick="NavigateToSearch">
+        <span class="icon">🔍</span>
+        <span>Search</span>
+    </div>
+</div>
+
+@code {
+void NavigateToCreateOrder() => NavigationManager.NavigateTo("/clients");
+void NavigateToStatistics() => NavigationManager.NavigateTo("/statistics");
+void NavigateToManage() => NavigationManager.NavigateTo("/managedata");
+void NavigateToSearch() => NavigationManager.NavigateTo("/search");
+}
