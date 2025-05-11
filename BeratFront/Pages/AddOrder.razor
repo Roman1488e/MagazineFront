@@ -2,7 +2,7 @@
 @using System.ComponentModel.DataAnnotations
 @using System.Text
 @using System.Text.Json
-@inject HttpClient Client;
+@inject HttpClient Client
 @inject NavigationManager NavManager
 
 <h3 style="text-align:center; margin-top: 20px;">Create New Client</h3>
@@ -50,6 +50,11 @@
     .submit-button:hover {
         background-color: #005fa3;
     }
+
+    .validation-message {
+        color: red;
+        font-size: 14px;
+    }
 </style>
 
 <EditForm Model="@model" OnValidSubmit="HandleValidSubmit">
@@ -60,23 +65,32 @@
         <div class="form-group">
             <label>Name</label>
             <InputText @bind-Value="model.Name" />
+            <ValidationMessage For="@(() => model.Name)" class="validation-message" />
         </div>
+
         <div class="form-group">
             <label>Surname</label>
             <InputText @bind-Value="model.Surname" />
         </div>
+
         <div class="form-group">
             <label>Contact Number</label>
-            <InputText @bind-Value="model.ContactNamber" />
+            <InputText @bind-Value="model.ContactNumber" />
+            <ValidationMessage For="@(() => model.ContactNumber)" class="validation-message" />
         </div>
+
         <div class="form-group">
             <label>Government ID</label>
             <InputText @bind-Value="model.GovernmentId" />
+            <ValidationMessage For="@(() => model.GovernmentId)" class="validation-message" />
         </div>
+
         <div class="form-group">
             <label>Address</label>
             <InputText @bind-Value="model.Address" />
+            <ValidationMessage For="@(() => model.Address)" class="validation-message" />
         </div>
+
         <button type="submit" class="submit-button">Submit</button>
     </div>
 </EditForm>
@@ -90,21 +104,28 @@
         var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
         var response = await Client.PostAsync("/api/clients/create", httpContent);
-        if(response.IsSuccessStatusCode)
-            NavManager.NavigateTo($"/createorder/{await response.Content.ReadAsStringAsync()}");
+        if (response.IsSuccessStatusCode)
+        {
+            var clientId = await response.Content.ReadAsStringAsync();
+            NavManager.NavigateTo($"/createorder/{clientId}");
+        }
     }
-}
 
-@code {
     public class CreateClientModel
     {
-        [Required]
-        public string Name { get; set; }
+        [Required(ErrorMessage = "Name is required")]
+        public string Name { get; set; } = "";
+
         public string? Surname { get; set; }
-        public string? ContactNamber { get; set; }
-        [Required]
-        public string GovernmentId { get; set; }
-        [Required]
-        public string Address { get; set; }
+
+        [RegularExpression(@"^\d+$", ErrorMessage = "Contact number must contain only digits")]
+        public string? ContactNumber { get; set; }
+
+        [Required(ErrorMessage = "Government ID is required")]
+        [RegularExpression(@"^\d{12}$", ErrorMessage = "Government ID must be exactly 12 digits")]
+        public string GovernmentId { get; set; } = "";
+
+        [Required(ErrorMessage = "Address is required")]
+        public string Address { get; set; } = "";
     }
 }

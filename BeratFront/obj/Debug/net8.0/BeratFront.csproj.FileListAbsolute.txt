@@ -1029,3 +1029,4 @@
 /home/tryhackme/RiderProjects/BeratFront/BeratFront/obj/Debug/net8.0/refint/BeratFront.dll
 /home/tryhackme/RiderProjects/BeratFront/BeratFront/obj/Debug/net8.0/BeratFront.pdb
 /home/tryhackme/RiderProjects/BeratFront/BeratFront/obj/Debug/net8.0/ref/BeratFront.dll
+/home/tryhackme/RiderProjects/BeratFront/BeratFront/obj/Debug/net8.0/BeratFront.sourcelink.json

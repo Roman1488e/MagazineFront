@@ -3,24 +3,62 @@
 
 <h3 style="text-align:center; margin-top: 20px;">📊 Payment Statistics</h3>
 
-@if (statistic == null)
+@if (paymentStatistic == null || generalStatistic == null || debtStatistic == null)
 {
     <p style="text-align:center;">Loading...</p>
 }
 else
 {
-    <div style="display: flex; justify-content: center; gap: 30px; margin-top: 40px;">
+    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; margin-top: 40px;">
+
         <div class="card">
             <h4>💰 Earned Today</h4>
-            <p>@statistic.EarnedToday.ToString("C")</p>
+            <p>@paymentStatistic.EarnedToday.ToString("C")</p>
         </div>
+
         <div class="card">
             <h4>📅 Earned This Month</h4>
-            <p>@statistic.EarnedinMounth.ToString("C")</p>
+            <p>@paymentStatistic.EarnedinMounth.ToString("C")</p>
         </div>
+
         <div class="card">
             <h4>📈 Total Earnings</h4>
-            <p>@statistic.EarnedForAllTime.ToString("C")</p>
+            <p>@paymentStatistic.EarnedForAllTime.ToString("C")</p>
+        </div>
+
+        <div class="card">
+            <h4>🧾 Total Debts</h4>
+            <p>@generalStatistic.TotalDebts</p>
+        </div>
+
+        <div class="card">
+            <h4>📦 Total Orders</h4>
+            <p>@generalStatistic.TotalOrders</p>
+        </div>
+
+        <div class="card">
+            <h4>✅ Paid Orders</h4>
+            <p>@generalStatistic.PaidOrders</p>
+        </div>
+
+        <div class="card">
+            <h4>👥 Total Clients</h4>
+            <p>@generalStatistic.TotalClients</p>
+        </div>
+
+        <div class="card">
+            <h4>💸 Total Debt Amount</h4>
+            <p>@debtStatistic.TotalDebtAmount.ToString("C")</p>
+        </div>
+
+        <div class="card">
+            <h4>✅ Paid Debt Amount</h4>
+            <p>@debtStatistic.PaidDebtAmount.ToString("C")</p>
+        </div>
+
+        <div class="card">
+            <h4>🕒 Last Payment</h4>
+            <p>@debtStatistic.LastDebtPaymentDate.ToShortDateString()</p>
         </div>
     </div>
 }
@@ -33,6 +71,7 @@ else
         background-color: #f9f9f9;
         text-align: center;
         min-width: 200px;
+        width: 220px;
         box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
@@ -42,17 +81,27 @@ else
     }
 
     .card p {
-        font-size: 24px;
+        font-size: 22px;
         font-weight: bold;
+    }
+
+    @@media (max-width: 600px) {
+        .card {
+            width: 100%;
+        }
     }
 </style>
 
 @code {
-    private PaymentStatisticDto? statistic;
+    private PaymentStatisticDto? paymentStatistic;
+    private GeneralStatisticDto? generalStatistic;
+    private DebtStatisticDto? debtStatistic;
 
     protected override async Task OnInitializedAsync()
     {
-        statistic = await Http.GetFromJsonAsync<PaymentStatisticDto>("/api/paymenthistory/statistic");
+        paymentStatistic = await Http.GetFromJsonAsync<PaymentStatisticDto>("/api/paymenthistory/statistic");
+        generalStatistic = await Http.GetFromJsonAsync<GeneralStatisticDto>("/api/order/statistics");
+        debtStatistic = await Http.GetFromJsonAsync<DebtStatisticDto>("/api/debt/statistics");
     }
 
     public class PaymentStatisticDto
@@ -60,5 +109,20 @@ else
         public decimal EarnedinMounth { get; set; }
         public decimal EarnedToday { get; set; }
         public decimal EarnedForAllTime { get; set; }
+    }
+
+    public class GeneralStatisticDto
+    {
+        public int TotalDebts { get; set; }
+        public int TotalOrders { get; set; }
+        public int PaidOrders { get; set; }
+        public int TotalClients { get; set; }
+    }
+
+    public class DebtStatisticDto
+    {
+        public decimal TotalDebtAmount { get; set; }
+        public decimal PaidDebtAmount { get; set; }
+        public DateTime LastDebtPaymentDate { get; set; }
     }
 }

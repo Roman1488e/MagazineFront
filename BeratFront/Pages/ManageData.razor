@@ -209,7 +209,7 @@ o.OrderNumber.ToString().Contains(term))
 
 private void ViewDetails(Guid orderId)
 {
-NavigationManager.NavigateTo($"/orderdetail/{orderId}");
+NavigationManager.NavigateTo($"/orders/detail/{orderId}");
 }
 
 private async Task PayDebt(OrderModel order, bool payAll = false)

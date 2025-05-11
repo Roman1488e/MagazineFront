@@ -1,4 +1,5 @@
 @page "/createorder/{CustomerId:guid}"
+@using System.ComponentModel.DataAnnotations
 @inject HttpClient Http
 @inject NavigationManager Nav
 
@@ -37,20 +38,29 @@
     .submit-btn:hover {
         background-color: #005fa3;
     }
+
+    .validation-message {
+        color: red;
+        font-size: 14px;
+    }
 </style>
 
 <div class="form-container">
     <EditForm Model="orderModel" OnValidSubmit="HandleSubmit">
         <DataAnnotationsValidator />
+        <ValidationSummary />
 
         <label>Product Name</label>
         <InputText @bind-Value="orderModel.ProductName" />
+        <ValidationMessage For="@(() => orderModel.ProductName)" class="validation-message" />
 
         <label>Total Price</label>
         <InputNumber @bind-Value="orderModel.TotalPrice" />
+        <ValidationMessage For="@(() => orderModel.TotalPrice)" class="validation-message" />
 
         <label>Paid Amount</label>
         <InputNumber @bind-Value="orderModel.PaidAmount" />
+        <ValidationMessage For="@(() => orderModel.PaidAmount)" class="validation-message" />
 
         <label>Remind In (Months)</label>
         <InputNumber @bind-Value="orderModel.RemindInMonths" />
@@ -60,35 +70,52 @@
 </div>
 
 @code {
-    [Parameter] public Guid CustomerId { get; set; }
+[Parameter] public Guid CustomerId { get; set; }
 
-    private CreateOrderModel orderModel = new();
+private CreateOrderModel orderModel = new();
 
-    protected override void OnInitialized()
-    {
-        orderModel.CustomerId = CustomerId;
-    }
+protected override void OnInitialized()
+{
+orderModel.CustomerId = CustomerId;
+}
 
-    private async Task HandleSubmit()
-    {
-        var response = await Http.PostAsJsonAsync("/api/order/create", orderModel);
+private async Task HandleSubmit()
+{
+var response = await Http.PostAsJsonAsync("/api/order/create", orderModel);
 
-        if (response.IsSuccessStatusCode)
-        {
-            Nav.NavigateTo("/");
-        }
-        else
-        {
-            Console.WriteLine("Error creating order: " + response.StatusCode);
-        }
-    }
+if (response.IsSuccessStatusCode)
+{
+Nav.NavigateTo("/");
+}
+else
+{
+Console.WriteLine("Error creating order: " + response.StatusCode);
+}
+}
 
-    public class CreateOrderModel
-    {
-        public Guid CustomerId { get; set; }
-        public int RemindInMonths { get; set; }
-        public string ProductName { get; set; }
-        public decimal TotalPrice { get; set; }
-        public decimal PaidAmount { get; set; }
-    }
+public class CreateOrderModel : IValidatableObject
+{
+public Guid CustomerId { get; set; }
+
+[Required(ErrorMessage = "Product name is required")]
+public string ProductName { get; set; } = "";
+
+[Range(0.01, double.MaxValue, ErrorMessage = "Total price must be greater than 0")]
+public decimal TotalPrice { get; set; }
+
+[Range(0.01, double.MaxValue, ErrorMessage = "Paid amount must be greater than 0")]
+public decimal PaidAmount { get; set; }
+
+public int RemindInMonths { get; set; }
+
+public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+{
+if (PaidAmount > TotalPrice)
+{
+yield return new ValidationResult(
+"Paid amount cannot be greater than total price",
+new[] { nameof(PaidAmount) });
+}
+}
+}
 }

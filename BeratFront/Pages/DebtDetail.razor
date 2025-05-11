@@ -1,0 +1,100 @@
+@page "/debts/detail/{DebtId:guid}"
+@inject HttpClient Http
+@inject NavigationManager Nav
+@using System.Net.Http.Json
+@using Microsoft.AspNetCore.Components
+
+<h3 style="text-align:center; margin-top: 20px;">📄 Debt Details</h3>
+
+@if (debt == null)
+{
+    <p style="text-align:center;">Loading...</p>
+}
+else
+{
+    <div class="debt-details">
+        <div><strong>💵 Amount:</strong> @debt.Amount.ToString("C")</div>
+        <div><strong>📅 Created On:</strong> @debt.CreationDate.ToShortDateString()</div>
+        <div><strong>🕒 Last Payment Date:</strong> @debt.LastPaymentDate.ToShortDateString()</div>
+        <div><strong>💰 Last Payment Amount:</strong> @debt.LastPaymentAmount.ToString("C")</div>
+
+        <div class="btn-group">
+            <button class="details-btn" @onclick="GoToClientDetails">Client Details</button>
+            <button class="details-btn" @onclick="GoToOrderDetails">Order Details</button>
+        </div>
+    </div>
+}
+
+<style>
+    .debt-details {
+        max-width: 600px;
+        margin: 30px auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        font-family: sans-serif;
+        font-size: 18px;
+    }
+
+    .debt-details div {
+        margin-bottom: 12px;
+    }
+
+    .btn-group {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .details-btn {
+        flex: 1;
+        padding: 10px;
+        font-size: 16px;
+        border: none;
+        border-radius: 6px;
+        background-color: #0078d4;
+        color: white;
+        cursor: pointer;
+    }
+
+    .details-btn:hover {
+        background-color: #005fa3;
+    }
+</style>
+
+@code {
+    [Parameter]
+    public Guid DebtId { get; set; }
+
+    private Debt? debt;
+
+    protected override async Task OnInitializedAsync()
+    {
+        debt = await Http.GetFromJsonAsync<Debt>($"/api/debt/{DebtId}");
+    }
+
+    private void GoToClientDetails()
+    {
+        if (debt != null)
+            Nav.NavigateTo($"/clients/detail/{debt.ClientId}");
+    }
+
+    private void GoToOrderDetails()
+    {
+        if (debt != null)
+            Nav.NavigateTo($"/orders/detail/{debt.OrderId}");
+    }
+
+    public class Debt
+    {
+        public Guid Id { get; set; }
+        public decimal Amount { get; set; }
+        public Guid ClientId { get; set; }
+        public Guid OrderId { get; set; }
+        public DateTime CreationDate { get; set; }
+        public DateTime LastPaymentDate { get; set; }
+        public decimal LastPaymentAmount { get; set; }
+    }
+}
+

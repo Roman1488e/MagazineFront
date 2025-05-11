@@ -1,0 +1,180 @@
+@page "/clients/detail/{id:guid}"
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
+
+<h3 class="text-center mt-3">Client Details</h3>
+
+@if (client == null)
+{
+    <p class="text-center">Loading...</p>
+}
+else
+{
+    <div class="card p-4 m-3 shadow">
+        <p><strong>Full Name:</strong> @client.Name @client.Surname</p>
+        <p><strong>Contact:</strong> @client.ContactNamber</p>
+        <p><strong>Gov ID:</strong> @client.GovernmentId</p>
+        <p><strong>Address:</strong> @client.Address</p>
+        <p><strong>Registered:</strong> @client.DateOfRegistration.ToShortDateString()</p>
+
+        <div class="mt-3 d-flex gap-2 flex-wrap">
+            <button class="btn btn-warning" @onclick="@(() => Navigation.NavigateTo($"/clients/update/{id}"))">Update General Info</button>
+            <button class="btn btn-warning" @onclick="@(() => Navigation.NavigateTo($"/clients/update-contact/{id}"))">Update Contact</button>
+            <button class="btn btn-warning" @onclick="@(() => Navigation.NavigateTo($"/clients/update-govid/{id}"))">Update Gov ID</button>
+            <button class="btn btn-danger" @onclick="DeleteClient">Delete</button>
+        </div>
+    </div>
+
+    @if (client.Orders?.Count > 0)
+    {
+        <h4 class="text-center text-primary mt-4">Orders</h4>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Total Price</th>
+                    <th>Paid</th>
+                    <th>Remind (mo)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in client.Orders)
+                {
+                    <tr>
+                        <td>@order.ProductName</td>
+                        <td>@order.TotalPrice.ToString("C")</td>
+                        <td>@order.PaidAmount.ToString("C")</td>
+                        <td>@order.RemindInMonths</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    @if (client.PaymentHistory?.Count > 0)
+    {
+        <h4 class="text-center text-primary mt-4">Payment History</h4>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Order Date</th>
+                    <th>Paid</th>
+                    <th>Paid On</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var ph in client.PaymentHistory)
+                {
+                    <tr>
+                        <td>@ph.ProductName</td>
+                        <td>@ph.OrderDate.ToShortDateString()</td>
+                        <td>@ph.PaymentAmount.ToString("C")</td>
+                        <td>@ph.PaymentDate.ToShortDateString()</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    @if (client.Debt?.Count > 0)
+    {
+        <h4 class="text-center text-primary mt-4">Debts</h4>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Amount</th>
+                    <th>Created</th>
+                    <th>Last Payment</th>
+                    <th>Last Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var d in client.Debt)
+                {
+                    <tr>
+                        <td>@d.Amount.ToString("C")</td>
+                        <td>@d.CreationDate.ToShortDateString()</td>
+                        <td>@d.LastPaymentDate.ToShortDateString()</td>
+                        <td>@d.LastPaymentAmount.ToString("C")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
+
+@code {
+    [Parameter] public Guid id { get; set; }
+    private ClientDto? client;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            client = await Http.GetFromJsonAsync<ClientDto>($"/api/clients/{id}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error loading client: " + ex.Message);
+        }
+    }
+
+    private async Task DeleteClient()
+    {
+        bool confirmed = await JS.InvokeAsync<bool>("confirm", "Delete this client?");
+        if (confirmed)
+        {
+            await Http.DeleteAsync($"/api/clients/{id}");
+            Navigation.NavigateTo("/clients");
+        }
+    }
+
+    public class ClientDto
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; } = "";
+        public string Surname { get; set; } = "";
+        public string ContactNamber { get; set; } = "";
+        public string GovernmentId { get; set; } = "";
+        public string Address { get; set; } = "";
+        public DateTime DateOfRegistration { get; set; }
+        public List<Order> Orders { get; set; } = new();
+        public List<PaymentHistory> PaymentHistory { get; set; } = new();
+        public List<Debt> Debt { get; set; } = new();
+    }
+
+    public class Order
+    {
+        public Guid OrderId { get; set; }
+        public string ProductName { get; set; } = "";
+        public decimal TotalPrice { get; set; }
+        public decimal PaidAmount { get; set; }
+        public int RemindInMonths { get; set; }
+    }
+
+    public class PaymentHistory
+    {
+        public Guid PaymentHistoryId { get; set; }
+        public Guid OrderId { get; set; }
+        public Guid ClientId { get; set; }
+        public string ProductName { get; set; } = "";
+        public DateTime OrderDate { get; set; }
+        public DateTime PaymentDate { get; set; }
+        public decimal PaymentAmount { get; set; }
+    }
+
+    public class Debt
+    {
+        public Guid Id { get; set; }
+        public decimal Amount { get; set; }
+        public Guid ClientId { get; set; }
+        public Guid OrderId { get; set; }
+        public DateTime CreationDate { get; set; }
+        public DateTime LastPaymentDate { get; set; }
+        public decimal LastPaymentAmount { get; set; }
+    }
+}
+
