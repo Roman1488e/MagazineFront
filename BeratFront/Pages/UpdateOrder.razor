@@ -1,0 +1,55 @@
+﻿@page "/orders/update/{OrderId:guid}"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+<h3 style="text-align:center; margin-top: 20px;">Update Order Info</h3>
+
+<div style="width: 90%; margin: auto; font-family: sans-serif;">
+    <div style="margin-bottom: 15px;">
+        <label>Product Name:</label>
+        <input type="text" @bind="model.ProductName" style="width: 100%; padding: 8px;" />
+    </div>
+    <div style="margin-bottom: 15px;">
+        <label>Reminder Date:</label>
+        <input type="datetime-local" @bind="reminderDateLocal" style="width: 100%; padding: 8px;" />
+    </div>
+    <button @onclick="UpdateOrderM" style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px;">
+        Save
+    </button>
+</div>
+
+@code {
+    [Parameter]
+    public Guid OrderId { get; set; }
+
+    private UpdateOrderGeneralInfoModel model = new();
+
+    // Локальное поле для привязки даты
+    private DateTime? reminderDateLocal;
+
+    private async Task UpdateOrderM()
+    {
+        // Преобразуем локальную дату в UTC
+        if (reminderDateLocal.HasValue)
+        {
+            model.ReminderDate = DateTime.SpecifyKind(reminderDateLocal.Value, DateTimeKind.Local).ToUniversalTime();
+        }
+
+        var response = await Http.PutAsJsonAsync($"/api/order/{OrderId}/updategeninfo", model);
+
+        if (response.IsSuccessStatusCode)
+        {
+            Navigation.NavigateTo($"/orders/detail/{OrderId}");
+        }
+        else
+        {
+            Navigation.NavigateTo("/");
+        }
+    }
+
+    public class UpdateOrderGeneralInfoModel
+    {
+        public string? ProductName { get; set; }
+        public DateTime? ReminderDate { get; set; }
+    }
+}

@@ -32,21 +32,23 @@ else
         <h4 class="text-center text-primary mt-4">Orders</h4>
         <table class="table table-bordered table-striped">
             <thead>
-                <tr>
-                    <th>Product</th>
-                    <th>Total Price</th>
-                    <th>Paid</th>
-                    <th>Remind (mo)</th>
-                </tr>
+            <tr>
+                <th>Order Number</th>
+                <th>Product</th>
+                <th>Total Price</th>
+                <th>Paid</th>
+                <th>Reminder Date</th>
+            </tr>
             </thead>
             <tbody>
                 @foreach (var order in client.Orders)
                 {
                     <tr>
+                        <td>@order.OrderNumber</td>
                         <td>@order.ProductName</td>
                         <td>@order.TotalPrice.ToString("C")</td>
                         <td>@order.PaidAmount.ToString("C")</td>
-                        <td>@order.RemindInMonths</td>
+                        <td>@order.ReminderDate.ToShortDateString()</td>
                     </tr>
                 }
             </tbody>
@@ -59,8 +61,6 @@ else
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th>Product</th>
-                    <th>Order Date</th>
                     <th>Paid</th>
                     <th>Paid On</th>
                 </tr>
@@ -69,8 +69,6 @@ else
                 @foreach (var ph in client.PaymentHistory)
                 {
                     <tr>
-                        <td>@ph.ProductName</td>
-                        <td>@ph.OrderDate.ToShortDateString()</td>
                         <td>@ph.PaymentAmount.ToString("C")</td>
                         <td>@ph.PaymentDate.ToShortDateString()</td>
                     </tr>
@@ -79,7 +77,7 @@ else
         </table>
     }
 
-    @if (client.Debt?.Count > 0)
+    @if (client.Debt?.Count > 0 && client.Debt.Any(x=> x.Amount != 0))
     {
         <h4 class="text-center text-primary mt-4">Debts</h4>
         <table class="table table-bordered table-striped">
@@ -94,12 +92,15 @@ else
             <tbody>
                 @foreach (var d in client.Debt)
                 {
-                    <tr>
-                        <td>@d.Amount.ToString("C")</td>
-                        <td>@d.CreationDate.ToShortDateString()</td>
-                        <td>@d.LastPaymentDate.ToShortDateString()</td>
-                        <td>@d.LastPaymentAmount.ToString("C")</td>
-                    </tr>
+                    @if (d.Amount > 0)
+                    {
+                        <tr>
+                            <td>@d.Amount.ToString("C")</td>
+                            <td>@d.CreationDate.ToShortDateString()</td>
+                            <td>@d.LastPaymentDate.ToShortDateString()</td>
+                            <td>@d.LastPaymentAmount.ToString("C")</td>
+                        </tr>
+                    }
                 }
             </tbody>
         </table>
@@ -149,19 +150,22 @@ else
     public class Order
     {
         public Guid OrderId { get; set; }
+        public Guid CustomerId { get; set; }
+        public Debt? Debt { get; set; }
+        public int OrderNumber { get; set; }
         public string ProductName { get; set; } = "";
+        public string CustomerFullName { get; set; } = "";
+        public bool IsReminding { get; set; } = false;
+        public bool IsPaid { get; set; }
+        public DateTime OrderDate { get; set; }
+        public DateTime ReminderDate { get; set; }
+        public List<PaymentHistory>? PaymentHistory { get; set; } = [];
         public decimal TotalPrice { get; set; }
         public decimal PaidAmount { get; set; }
-        public int RemindInMonths { get; set; }
     }
 
     public class PaymentHistory
     {
-        public Guid PaymentHistoryId { get; set; }
-        public Guid OrderId { get; set; }
-        public Guid ClientId { get; set; }
-        public string ProductName { get; set; } = "";
-        public DateTime OrderDate { get; set; }
         public DateTime PaymentDate { get; set; }
         public decimal PaymentAmount { get; set; }
     }

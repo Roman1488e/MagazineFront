@@ -9,26 +9,33 @@
 }
 else
 {
-    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; margin-top: 40px;">
+    <div style="text-align:center; margin-bottom: 30px;">
+        <label for="monthSelect">📅 Select Month:</label>
+        <select @bind="selectedMonth" @bind:event="onchange" id="monthSelect" style="margin-left: 10px; padding: 5px;">
+            @foreach (var m in paymentStatistic.MounthEarnings.OrderByDescending(m => m.Year).ThenByDescending(m => m.Month))
+            {
+                <option value="@($"{m.Year}-{m.Month}")">@($"{m.MonthName} {m.Year}")</option>
+            }
+        </select>
+    </div>
 
-        <div class="card">
-            <h4>💰 Earned Today</h4>
-            <p>@paymentStatistic.EarnedToday.ToString("C")</p>
+    @if (selectedEarnings != null)
+    {
+        <div style="text-align:center; font-size: 20px; margin-bottom: 20px;">
+            💰 Earned in @selectedEarnings.MonthName @selectedEarnings.Year: 
+            <strong>@selectedEarnings.Amount.ToString("C")</strong>
         </div>
+    }
 
-        <div class="card">
-            <h4>📅 Earned This Month</h4>
-            <p>@paymentStatistic.EarnedinMounth.ToString("C")</p>
-        </div>
-
+    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; margin-top: 20px;">
         <div class="card">
             <h4>📈 Total Earnings</h4>
             <p>@paymentStatistic.EarnedForAllTime.ToString("C")</p>
         </div>
 
         <div class="card">
-            <h4>🧾 Total Debts</h4>
-            <p>@generalStatistic.TotalDebts</p>
+            <h4>🧾 Active Debts</h4>
+            <p>@generalStatistic.NotPaidDebts</p>
         </div>
 
         <div class="card">
@@ -49,16 +56,6 @@ else
         <div class="card">
             <h4>💸 Total Debt Amount</h4>
             <p>@debtStatistic.TotalDebtAmount.ToString("C")</p>
-        </div>
-
-        <div class="card">
-            <h4>✅ Paid Debt Amount</h4>
-            <p>@debtStatistic.PaidDebtAmount.ToString("C")</p>
-        </div>
-
-        <div class="card">
-            <h4>🕒 Last Payment</h4>
-            <p>@debtStatistic.LastDebtPaymentDate.ToShortDateString()</p>
         </div>
     </div>
 }
@@ -97,23 +94,58 @@ else
     private GeneralStatisticDto? generalStatistic;
     private DebtStatisticDto? debtStatistic;
 
+    private string? selectedMonth;
+    private MounthEarnings? selectedEarnings;
+
     protected override async Task OnInitializedAsync()
     {
         paymentStatistic = await Http.GetFromJsonAsync<PaymentStatisticDto>("/api/paymenthistory/statistic");
         generalStatistic = await Http.GetFromJsonAsync<GeneralStatisticDto>("/api/order/statistics");
         debtStatistic = await Http.GetFromJsonAsync<DebtStatisticDto>("/api/debt/statistics");
+
+        // автоустановка на текущий месяц
+        var current = DateTime.Now;
+        selectedMonth = $"{current.Year}-{current.Month}";
+        SetSelectedEarnings();
+    }
+
+    private void OnMonthChanged(ChangeEventArgs e)
+    {
+        selectedMonth = e.Value?.ToString();
+        SetSelectedEarnings();
+    }
+
+    private void SetSelectedEarnings()
+    {
+        if (string.IsNullOrEmpty(selectedMonth) || paymentStatistic?.MounthEarnings == null)
+            return;
+
+        var parts = selectedMonth.Split("-");
+        if (int.TryParse(parts[0], out var year) && int.TryParse(parts[1], out var month))
+        {
+            selectedEarnings = paymentStatistic.MounthEarnings
+                .FirstOrDefault(x => x.Year == year && x.Month == month);
+        }
     }
 
     public class PaymentStatisticDto
     {
-        public decimal EarnedinMounth { get; set; }
         public decimal EarnedToday { get; set; }
         public decimal EarnedForAllTime { get; set; }
+        public List<MounthEarnings> MounthEarnings { get; set; } = new();
+    }
+
+    public class MounthEarnings
+    {
+        public decimal Amount { get; set; }
+        public int Month { get; set; }
+        public int Year { get; set; }
+        public string MonthName { get; set; } = "";
     }
 
     public class GeneralStatisticDto
     {
-        public int TotalDebts { get; set; }
+        public int NotPaidDebts { get; set; }
         public int TotalOrders { get; set; }
         public int PaidOrders { get; set; }
         public int TotalClients { get; set; }
@@ -122,7 +154,5 @@ else
     public class DebtStatisticDto
     {
         public decimal TotalDebtAmount { get; set; }
-        public decimal PaidDebtAmount { get; set; }
-        public DateTime LastDebtPaymentDate { get; set; }
     }
 }

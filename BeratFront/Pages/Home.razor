@@ -1,45 +1,22 @@
 ﻿@page "/"
+@inject HttpClient Http
 @inject NavigationManager NavigationManager
 
-<style>
-    html, body {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-        font-family: sans-serif;
-    }
-
-    .fullscreen-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: 1fr 1fr;
-        height: 100vh;
-        width: 100vw;
-    }
-
-    .tile {
-        background-color: #0078d4;
-        color: white;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        font-size: 28px;
-        font-weight: bold;
-        cursor: pointer;
-        transition: background-color 0.2s;
-        border: 1px solid #ffffff33;
-    }
-
-    .tile:hover {
-        background-color: #005fa3;
-    }
-
-    .tile .icon {
-        font-size: 64px;
-        margin-bottom: 10px;
-    }
-</style>
+@if (reminders?.Any() == true)
+{
+    <div class="reminder-popup">
+        <h4>🔔 Напоминания:</h4>
+        <ul>
+            @foreach (var reminder in reminders)
+            {
+                <li>
+                    Заказ №@reminder.OrderNumber — @reminder.ReminderDate?.ToString("dd.MM.yyyy HH:mm")
+                    <button @onclick="() => NavigateToOrder(reminder.OrderId)">Открыть</button>
+                </li>
+            }
+        </ul>
+    </div>
+}
 
 <div class="fullscreen-grid">
     <div class="tile" @onclick="NavigateToCreateOrder">
@@ -60,9 +37,67 @@
     </div>
 </div>
 
+<style>
+    .reminder-popup {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffeeba;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        z-index: 9999;
+    }
+
+    .reminder-popup h4 {
+        margin-top: 0;
+    }
+
+    .reminder-popup ul {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    .reminder-popup li {
+        margin-bottom: 10px;
+    }
+
+    .reminder-popup button {
+        margin-left: 10px;
+        padding: 4px 8px;
+        font-size: 14px;
+    }
+
+    /* остальной CSS без изменений */
+</style>
+
 @code {
-void NavigateToCreateOrder() => NavigationManager.NavigateTo("/clients");
-void NavigateToStatistics() => NavigationManager.NavigateTo("/statistics");
-void NavigateToManage() => NavigationManager.NavigateTo("/managedata");
-void NavigateToSearch() => NavigationManager.NavigateTo("/search");
+    private List<ReminderDto>? reminders;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            reminders = await Http.GetFromJsonAsync<List<ReminderDto>>("api/order/reminders");
+        }
+        catch
+        {
+            // Обработка ошибок при запросе
+        }
+    }
+
+    void NavigateToCreateOrder() => NavigationManager.NavigateTo("/clients");
+    void NavigateToStatistics() => NavigationManager.NavigateTo("/statistics");
+    void NavigateToManage() => NavigationManager.NavigateTo("/managedata");
+    void NavigateToSearch() => NavigationManager.NavigateTo("/search");
+    void NavigateToOrder(Guid orderId) => NavigationManager.NavigateTo($"/orders/detail/{orderId}");
+
+    public class ReminderDto
+    {
+        public Guid OrderId { get; set; }
+        public DateTime? ReminderDate { get; set; }
+        public int OrderNumber { get; set; }
+    }
 }

@@ -119,66 +119,68 @@ else
     }
 
     private async Task LoadDataAsync()
+{
+    IsLoading = true;
+
+    switch (SelectedType)
     {
-        IsLoading = true;
-
-        switch (SelectedType)
-        {
-            case "orders":
-                var orders = await Http.GetFromJsonAsync<List<OrderDto>>("/api/orders");
-                AllItems = orders.Select(o => new DisplayItem
+        case "orders":
+            var orders = await Http.GetFromJsonAsync<List<OrderDto>>("/api/orders");
+            AllItems = orders.Select(o => new DisplayItem
+            {
+                Id = o.orderId.ToString(),
+                Values = new List<string>
                 {
-                    Id = o.orderId.ToString(),
-                    Values = new List<string>
-                    {
-                        o.productName,
-                        o.customerFullName,
-                        o.totalPrice.ToString("C"),
-                        o.orderDate.ToShortDateString()
-                    }
-                }).ToList();
-                TableHeaders = new() { "Product", "Customer", "Total Price", "Order Date" };
-                break;
+                    o.productName,
+                    o.customerFullName,
+                    o.totalPrice.ToString("C"),
+                    o.orderDate.ToShortDateString()
+                }
+            }).ToList();
+            TableHeaders = new() { "Product", "Customer", "Total Price", "Order Date" };
+            break;
 
-            case "debts":
-                var debts = await Http.GetFromJsonAsync<List<DebtDto>>("/api/debt/search");
-                AllItems = debts.Select(d => new DisplayItem
+        case "debts":
+            var debts = await Http.GetFromJsonAsync<List<DebtDto>>("/api/debt/search");
+            AllItems = debts.Select(d => new DisplayItem
+            {
+                Id = d.id.ToString(),
+                Values = new List<string>
                 {
-                    Id = d.id.ToString(),
-                    Values = new List<string>
-                    {
-                        d.clientFullName,
-                        d.productName,
-                        d.amount.ToString("C"),
-                        d.lastPaymentDate.ToShortDateString(),
-                        d.lastPaymentAmount.ToString("C")
-                    }
-                }).ToList();
-                TableHeaders = new() { "Client", "Product", "Amount", "Last Payment Date", "Last Payment Amount" };
-                break;
+                    d.clientFullName,
+                    d.productName,
+                    d.amount.ToString("C"),
+                    d.lastPaymentDate.ToShortDateString(),
+                    d.lastPaymentAmount.ToString("C")
+                }
+            }).ToList();
+            TableHeaders = new() { "Client", "Product", "Amount", "Last Payment Date", "Last Payment Amount" };
+            break;
 
-            case "clients":
-                var clients = await Http.GetFromJsonAsync<List<ClientDto>>("/api/clients");
-                AllItems = clients.Select(c => new DisplayItem
+        case "clients":
+            var clients = await Http.GetFromJsonAsync<List<ClientDto>>("/api/clients");
+            AllItems = clients.Select(c => new DisplayItem
+            {
+                Id = c.Id.ToString(),
+                Values = new List<string>
                 {
-                    Id = c.Id.ToString(),
-                    Values = new List<string>
-                    {
-                        c.Name,
-                        c.Surname,
-                        c.ContactNamber,
-                        c.GovernmentId,
-                        c.Address,
-                        c.DateOfRegistration.ToShortDateString()
-                    }
-                }).ToList();
-                TableHeaders = new() { "Name","Surname", "Phone", "GovId", "Address", "DateOfRegistration" };
-                break;
-        }
-
-        FilterData();
-        IsLoading = false;
+                    c.Name,
+                    c.Surname,
+                    c.ContactNamber,
+                    c.GovernmentId,
+                    c.Address,
+                    c.DateOfRegistration.ToShortDateString()
+                }
+            }).ToList();
+            TableHeaders = new() { "Name","Surname", "Phone", "GovId", "Address", "DateOfRegistration" };
+            break;
     }
+
+    FilterData();           
+    IsLoading = false;
+    StateHasChanged();        
+}
+
 
     private void FilterData()
     {
