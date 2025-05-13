@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "E3IXEaKab+kQimQ38dnYDQtOyMN43cqJEg8Qf0/crq8=",
+  "Hash": "KlTmddb/EsrRhvJC7Jf+QlPJBhL+sZz70ICW3DPseJI=",
   "Source": "BeratFront",
   "BasePath": "/",
   "Mode": "Root",
@@ -7900,6 +7900,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\index.html"
+    },
+    {
+      "Identity": "C:\\Users\\User\\Documents\\GitHub\\MagazineFront\\BeratFront\\wwwroot\\photo_5422758139960356808_y.png",
+      "SourceId": "BeratFront",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\User\\Documents\\GitHub\\MagazineFront\\BeratFront\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "photo_5422758139960356808_y.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\photo_5422758139960356808_y.png"
     },
     {
       "Identity": "C:\\Users\\User\\Documents\\GitHub\\MagazineFront\\BeratFront\\wwwroot\\sample-data\\weather.json",

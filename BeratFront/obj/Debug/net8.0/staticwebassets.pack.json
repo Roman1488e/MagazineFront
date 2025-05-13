@@ -37,6 +37,10 @@
       "PackagePath": "staticwebassets\\index.html"
     },
     {
+      "Id": "C:\\Users\\User\\Documents\\GitHub\\MagazineFront\\BeratFront\\wwwroot\\photo_5422758139960356808_y.png",
+      "PackagePath": "staticwebassets\\photo_5422758139960356808_y.png"
+    },
+    {
       "Id": "C:\\Users\\User\\Documents\\GitHub\\MagazineFront\\BeratFront\\wwwroot\\sample-data\\weather.json",
       "PackagePath": "staticwebassets\\sample-data\\weather.json"
     },
