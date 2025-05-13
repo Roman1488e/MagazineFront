@@ -2,26 +2,26 @@
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 
-<h3 style="text-align:center; margin-top: 20px;">Search Data</h3>
+<h3 style="text-align:center; margin-top: 20px;">Bilgi ara</h3>
 
 <div class="search-container">
     <select @bind="SelectedType">
-        <option value="orders">Orders</option>
-        <option value="debts">Debts</option>
-        <option value="clients">Clients</option>
+        <option value="orders">Siparişler</option>
+        <option value="debts">Alacaklar</option>
+        <option value="clients">Müşteriler</option>
     </select>
 
-    <InputText @bind-Value="SearchTerm" placeholder="Search..." />
-    <button @onclick="FilterData">Search</button>
+    <InputText @bind-Value="SearchTerm" placeholder="Ara..." />
+    <button @onclick="FilterData">Ara</button>
 </div>
 
 @if (IsLoading)
 {
-    <p style="text-align:center;">Loading...</p>
+    <p style="text-align:center;">Yükleniyor...</p>
 }
 else if (FilteredItems.Count == 0)
 {
-    <p style="text-align:center;">No data found.</p>
+    <p style="text-align:center;">Bilgi bulunamadı</p>
 }
 else
 {
@@ -44,7 +44,7 @@ else
                         <td>@value</td>
                     }
                     <td>
-                        <button @onclick="() => ViewDetails(item.Id)">Details</button>
+                        <button @onclick="() => ViewDetails(item.Id)">Detaylar</button>
                     </td>
                 </tr>
             }
@@ -141,7 +141,7 @@ else
                     o.orderDate.ToShortDateString()
                 }
             }).ToList();
-            TableHeaders = new() { "Product", "Customer", "Total Price", "Order Date" };
+            TableHeaders = new() { "Ürün", "Müşteri", "Toplam fiyat", "Sipariş tarihi" };
             break;
 
         case "debts":
@@ -158,7 +158,7 @@ else
                     d.lastPaymentAmount.ToString("C")
                 }
             }).ToList();
-            TableHeaders = new() { "Client", "Product", "Amount", "Last Payment Date", "Last Payment Amount" };
+            TableHeaders = new() { "Müşteri", "Ürün", "Alacak", "Son ödeniş tarihi", "Son ödeme tarihi" };
             break;
 
         case "clients":
@@ -176,7 +176,7 @@ else
                     c.DateOfRegistration.ToShortDateString()
                 }
             }).ToList();
-            TableHeaders = new() { "Name","Surname", "Phone", "GovId", "Address", "DateOfRegistration" };
+            TableHeaders = new() { "Ad","Soyad", "Telefon numarası", "TC kimlik numarası", "Adres", "Kayıt tarihi" };
             break;
     }
 

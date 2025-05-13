@@ -2,19 +2,19 @@
 @inject HttpClient Http
 @inject NavigationManager Navigation
 
-<h3 style="text-align:center; margin-top: 20px;">Update Order Info</h3>
+<h3 style="text-align:center; margin-top: 20px;">Sipariş bilgisini güncelle</h3>
 
 <div style="width: 90%; margin: auto; font-family: sans-serif;">
     <div style="margin-bottom: 15px;">
-        <label>Product Name:</label>
+        <label>Ürün adı:</label>
         <input type="text" @bind="model.ProductName" style="width: 100%; padding: 8px;" />
     </div>
     <div style="margin-bottom: 15px;">
-        <label>Reminder Date:</label>
+        <label>Hatırlatıcı tarihi:</label>
         <input type="datetime-local" @bind="reminderDateLocal" style="width: 100%; padding: 8px;" />
     </div>
     <button @onclick="UpdateOrderM" style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px;">
-        Save
+        Kayıt
     </button>
 </div>
 <style>

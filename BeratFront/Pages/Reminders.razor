@@ -2,21 +2,21 @@
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 
-<h2 style="text-align:center; margin-top: 20px;">🔔 Reminders</h2>
+<h2 style="text-align:center; margin-top: 20px;">🔔 Hatırlatıcılar</h2>
 
 <div style="width: 90%; margin: auto; font-family: sans-serif;">
     @if (orderReminders is not null && orderReminders.Any())
     {
-        <h3>Order Reminders</h3>
+        <h3>Sipariş hatırlatıcıları</h3>
         <table class="reminder-table">
             <thead>
                 <tr>
-                    <th>Order №</th>
-                    <th>Reminder Date</th>
-                    <th>Client</th>
-                    <th>Phone</th>
-                    <th>Product</th>
-                    <th>Action</th>
+                    <th>Sipariş numarası</th>
+                    <th>Hatırlatıcı tarihi</th>
+                    <th>Müşteri</th>
+                    <th>Telefon numarası</th>
+                    <th>Ürün</th>
+                    <th>Eylem</th>
                 </tr>
             </thead>
             <tbody>
@@ -29,7 +29,7 @@
                         <td>@r.ClientsNumber</td>
                         <td>@r.ProductName</td>
                         <td>
-                            <button class="done-button" @onclick="() => MarkAsChecked(r.OrderId)">Done</button>
+                            <button class="done-button" @onclick="() => MarkAsChecked(r.OrderId)">Tamam</button>
                         </td>
                     </tr>
                 }
@@ -38,20 +38,20 @@
     }
     else
     {
-        <p style="color: gray;">Нет напоминаний по заказам.</p>
+        <p style="color: gray;">Şu anda hatırlatıcı bulunmuyor.</p>
     }
 
     @if (debtReminders is not null && debtReminders.Any())
     {
-        <h3 style="margin-top:40px;">Debt Payment Reminders</h3>
+        <h3 style="margin-top:40px;">Alacak hatırlatıcıları</h3>
         <table class="reminder-table">
             <thead>
                 <tr>
-                    <th>Client</th>
-                    <th>Phone</th>
-                    <th>Amount</th>
-                    <th>Last Payment</th>
-                    <th>Last Payment Date</th>
+                    <th>Müşteri</th>
+                    <th>Telefon numarası</th>
+                    <th>Toplam miktar</th>
+                    <th>Son ödenen miktar</th>
+                    <th>Son ödeme tarihi</th>
                 </tr>
             </thead>
             <tbody>
@@ -70,7 +70,7 @@
     }
     else
     {
-        <p style="color: gray;">Нет напоминаний по долгам.</p>
+        <p style="color: gray;">Alacak hatırlatıcısı yok.</p>
     }
 </div>
 

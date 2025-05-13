@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BeratFront")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e36b9f2a17b0f42d9938a27e1a2251f55a11099d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+439d67f33ddbcb1c74b9435d5eb480dde825fb9d")]
 [assembly: System.Reflection.AssemblyProductAttribute("BeratFront")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BeratFront")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

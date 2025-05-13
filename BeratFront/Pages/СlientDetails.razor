@@ -4,40 +4,40 @@
 @inject NavigationManager Navigation
 @inject IJSRuntime JS
 
-<h3 class="text-center mt-3">Client Details</h3>
+<h3 class="text-center mt-3">Müşteri detayları</h3>
 
 @if (client == null)
 {
-    <p class="text-center">Loading...</p>
+    <p class="text-center">Yüklenmekte...</p>
 }
 else
 {
     <div class="card p-4 m-3 shadow">
-        <p><strong>Full Name:</strong> @client.Name @client.Surname</p>
-        <p><strong>Contact:</strong> @client.ContactNamber</p>
-        <p><strong>Gov ID:</strong> @client.GovernmentId</p>
-        <p><strong>Address:</strong> @client.Address</p>
-        <p><strong>Registered:</strong> @client.DateOfRegistration.ToShortDateString()</p>
+        <p><strong>Tam ad:</strong> @client.Name @client.Surname</p>
+        <p><strong>Telefon numarası:</strong> @client.ContactNamber</p>
+        <p><strong>TC kimlik numarası:</strong> @client.GovernmentId</p>
+        <p><strong>Adres:</strong> @client.Address</p>
+        <p><strong>Kayıt tarihi:</strong> @client.DateOfRegistration.ToShortDateString()</p>
 
         <div class="mt-3 d-flex gap-2 flex-wrap">
-            <button class="btn btn-warning" @onclick="@(() => Navigation.NavigateTo($"/clients/update/{id}"))">Update General Info</button>
-            <button class="btn btn-warning" @onclick="@(() => Navigation.NavigateTo($"/clients/update-contact/{id}"))">Update Contact</button>
-            <button class="btn btn-warning" @onclick="@(() => Navigation.NavigateTo($"/clients/update-govid/{id}"))">Update Gov ID</button>
-            <button class="btn btn-danger" @onclick="DeleteClient">Delete</button>
+            <button class="btn btn-warning" @onclick="@(() => Navigation.NavigateTo($"/clients/update/{id}"))">Genel bilgileri güncelle</button>
+            <button class="btn btn-warning" @onclick="@(() => Navigation.NavigateTo($"/clients/update-contact/{id}"))">İletişim numarasını güncelle</button>
+            <button class="btn btn-warning" @onclick="@(() => Navigation.NavigateTo($"/clients/update-govid/{id}"))">TC kimlik no güncelle</button>
+            <button class="btn btn-danger" @onclick="DeleteClient">Sil</button>
         </div>
     </div>
 
     @if (client.Orders?.Count > 0)
     {
-        <h4 class="text-center text-primary mt-4">Orders</h4>
+        <h4 class="text-center text-primary mt-4">Siparişler</h4>
         <table class="table table-bordered table-striped">
             <thead>
             <tr>
-                <th>Order Number</th>
-                <th>Product</th>
-                <th>Total Price</th>
-                <th>Paid</th>
-                <th>Reminder Date</th>
+                <th>Sipariş numarası</th>
+                <th>Ürün</th>
+                <th>Toplam fiyat</th>
+                <th>Ödendi mi</th>
+                <th>Hatırlatıcı tarihi</th>
             </tr>
             </thead>
             <tbody>
@@ -57,12 +57,12 @@ else
 
     @if (client.PaymentHistory?.Count > 0)
     {
-        <h4 class="text-center text-primary mt-4">Payment History</h4>
+        <h4 class="text-center text-primary mt-4">Ödeme geçmişi</h4>
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th>Paid</th>
-                    <th>Paid On</th>
+                    <th>Ödenen miktar</th>
+                    <th>Ödeme tarihi</th>
                 </tr>
             </thead>
             <tbody>
@@ -79,14 +79,14 @@ else
 
     @if (client.Debt?.Count > 0 && client.Debt.Any(x=> x.Amount != 0))
     {
-        <h4 class="text-center text-primary mt-4">Debts</h4>
+        <h4 class="text-center text-primary mt-4">Alacaklar</h4>
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th>Amount</th>
-                    <th>Created</th>
-                    <th>Last Payment</th>
-                    <th>Last Amount</th>
+                    <th>Miktar</th>
+                    <th>Oluşturma tarihi</th>
+                    <th>Son ödenen tarih</th>
+                    <th>Son ödenen miktar</th>
                 </tr>
             </thead>
             <tbody>
@@ -124,13 +124,13 @@ else
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Error loading client: " + ex.Message);
+            Console.WriteLine("Müşteri yüklenirken hata oluştu: " + ex.Message);
         }
     }
 
     private async Task DeleteClient()
     {
-        bool confirmed = await JS.InvokeAsync<bool>("confirm", "Delete this client?");
+        bool confirmed = await JS.InvokeAsync<bool>("confirm", "Bu müşteriyi silmek istediğinizden emin misiniz? Bu eylem kalıcıdır.");
         if (confirmed)
         {
             await Http.DeleteAsync($"/api/clients/{id}");

@@ -117,19 +117,19 @@
 
     public class CreateClientModel
     {
-        [Required(ErrorMessage = "Name is required")]
+        [Required(ErrorMessage = "Ad girilmesi zorunludur")]
         public string Name { get; set; } = "";
 
         public string? Surname { get; set; }
 
-        [RegularExpression(@"^\d+$", ErrorMessage = "Contact number must contain only digits")]
+        [RegularExpression(@"^\d+$", ErrorMessage = "Telefon numarası sadece rakam içerebilir.")]
         public string? ContactNumber { get; set; }
 
-        [Required(ErrorMessage = "Government ID is required")]
-        [RegularExpression(@"^\d{12}$", ErrorMessage = "Government ID must be exactly 12 digits")]
+        [Required(ErrorMessage = "TC kimlik no zorunludur")]
+        [RegularExpression(@"^\d{11}$", ErrorMessage = "TC kimlik no 11 haneden oluşmalıdır.")]
         public string GovernmentId { get; set; } = "";
 
-        [Required(ErrorMessage = "Address is required")]
+        [Required(ErrorMessage = "Adres zorunludur")]
         public string Address { get; set; } = "";
     }
 }

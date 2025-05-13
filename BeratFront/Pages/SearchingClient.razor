@@ -86,8 +86,8 @@
 <div class="search-container">
     <InputText @bind-Value="searchTerm" placeholder="Müşteri bilgisi giriniz" />
     <select @bind="isDesc">
-        <option value="true">Recently registered</option>
-        <option value="false">Old registered</option>
+        <option value="true">Yakın zamanda eklenenle</option>
+        <option value="false">Önceden eklenenler</option>
     </select>
     <button @onclick="SearchClients">Ara</button>
 </div>

@@ -3,7 +3,7 @@
 @inject HttpClient Http
 @inject NavigationManager Nav
 
-<h3 style="text-align:center; margin-top: 20px;">Create Order</h3>
+<h3 style="text-align:center; margin-top: 20px;">Sipariş oluştur</h3>
 
 <style>
     #blazor-error-ui {
@@ -54,22 +54,22 @@
         <DataAnnotationsValidator />
         <ValidationSummary />
 
-        <label>Product Name</label>
+        <label>Ürün adı</label>
         <InputText @bind-Value="orderModel.ProductName" />
         <ValidationMessage For="@(() => orderModel.ProductName)" class="validation-message" />
 
-        <label>Total Price</label>
+        <label>Toplam fiyat</label>
         <InputNumber @bind-Value="orderModel.TotalPrice" />
         <ValidationMessage For="@(() => orderModel.TotalPrice)" class="validation-message" />
 
-        <label>Paid Amount</label>
+        <label>Ödenmiş miktar</label>
         <InputNumber @bind-Value="orderModel.PaidAmount" />
         <ValidationMessage For="@(() => orderModel.PaidAmount)" class="validation-message" />
 
-        <label>Remind In (Months)</label>
+        <label>Hatırlatıcı (Ay olarak)</label>
         <InputNumber @bind-Value="orderModel.RemindInMonths" />
 
-        <button type="submit" class="submit-btn">Submit Order</button>
+        <button type="submit" class="submit-btn">Siparişi oluştur</button>
     </EditForm>
 </div>
 
@@ -93,7 +93,7 @@ Nav.NavigateTo("/");
 }
 else
 {
-Console.WriteLine("Error creating order: " + response.StatusCode);
+Console.WriteLine("Sipariş oluşturulurken bir sorun oluştu (Romanı ara): " + response.StatusCode);
 }
 }
 
@@ -101,13 +101,13 @@ public class CreateOrderModel : IValidatableObject
 {
 public Guid CustomerId { get; set; }
 
-[Required(ErrorMessage = "Product name is required")]
+[Required(ErrorMessage = "Ürün adı zorunludur")]
 public string ProductName { get; set; } = "";
 
-[Range(0.01, double.MaxValue, ErrorMessage = "Total price must be greater than 0")]
+[Range(0.01, double.MaxValue, ErrorMessage = "Toplam fiyat 0'dan büyük olmalıdır")]
 public decimal TotalPrice { get; set; }
 
-[Range(0.01, double.MaxValue, ErrorMessage = "Paid amount must be greater than 0")]
+[Range(0.01, double.MaxValue, ErrorMessage = "Ödenmiş miktar 0'dan büyük olmalıdır")]
 public decimal PaidAmount { get; set; }
 
 public int RemindInMonths { get; set; }
@@ -117,7 +117,7 @@ public IEnumerable<ValidationResult> Validate(ValidationContext validationContex
 if (PaidAmount > TotalPrice)
 {
 yield return new ValidationResult(
-"Paid amount cannot be greater than total price",
+"Ödenmiş miktar toplam miktardan büyük olamaz",
 new[] { nameof(PaidAmount) });
 }
 }

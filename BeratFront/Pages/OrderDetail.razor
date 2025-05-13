@@ -3,54 +3,53 @@
 @inject NavigationManager Navigation
 
 
-<h3 style="text-align:center; margin-top: 20px;">Order Details</h3>
+<h3 style="text-align:center; margin-top: 20px;">Sipariş detayları</h3>
 
 @if (order == null)
 {
-    <p style="text-align:center;">Loading...</p>
+    <p style="text-align:center;">Yükleniyor...</p>
 }
 else
 {
     <div style="width: 90%; margin: auto; font-family: sans-serif;">
-        <h4>Order Info</h4>
         <h4>
-            Order Info
+            Sipariş bilgileri
             <button @onclick="NavigateToUpdateOrder" style="margin-left: 20px; padding: 6px 12px; background-color: #0078d4; color: white; border: none; border-radius: 5px;">
-                Edit
+                Düzenle
             </button>
         </h4>
 
         <ul>
-            <li><b>Order #:</b> @order.OrderNumber</li>
-            <li><b>Customer:</b> @order.CustomerFullName</li>
-            <li><b>Product:</b> @order.ProductName</li>
-            <li><b>Order Date:</b> @order.OrderDate.ToShortDateString()</li>
-            <li><b>Reminder Date:</b> @order.ReminderDate.ToShortDateString()</li>
-            <li><b>Total Price:</b> @order.TotalPrice.ToString("C")</li>
-            <li><b>Paid Amount:</b> @order.PaidAmount.ToString("C")</li>
-            <li><b>Is Paid:</b> @(order.IsPaid ? "Yes" : "No")</li>
-            <li><b>Is Reminding:</b> @(order.IsReminding ? "Yes" : "No")</li>
+            <li><b>Sipariş numarası:</b> @order.OrderNumber</li>
+            <li><b>Müşteri:</b> @order.CustomerFullName</li>
+            <li><b>Ürün:</b> @order.ProductName</li>
+            <li><b>Sipariş tarihi:</b> @order.OrderDate.ToShortDateString()</li>
+            <li><b>Hatırlatıcı tarihi:</b> @order.ReminderDate.ToShortDateString()</li>
+            <li><b>Toplam fiyat:</b> @order.TotalPrice.ToString("C")</li>
+            <li><b>Ödenen miktar:</b> @order.PaidAmount.ToString("C")</li>
+            <li><b>Ödendi mi:</b> @(order.IsPaid ? "Evet" : "Hayır")</li>
+            <li><b>Hatırlatma zamanı geldi mi:</b> @(order.IsReminding ? "Evet" : "Hayır")</li>
         </ul>
 
         @if (order.Debt != null)
         {
-            <h4>Debt Info</h4>
+            <h4>Borç bilgisi</h4>
             <ul>
-                <li><b>Amount:</b> @order.Debt.Amount.ToString("C")</li>
-                <li><b>Created:</b> @order.Debt.CreationDate.ToShortDateString()</li>
-                <li><b>Last Payment:</b> @order.Debt.LastPaymentDate.ToShortDateString()</li>
-                <li><b>Last Payment Amount:</b> @order.Debt.LastPaymentAmount.ToString("C")</li>
+                <li><b>Miktar:</b> @order.Debt.Amount.ToString("C")</li>
+                <li><b>Oluşturma tarihi:</b> @order.Debt.CreationDate.ToShortDateString()</li>
+                <li><b>Son ödenme tarihi:</b> @order.Debt.LastPaymentDate.ToShortDateString()</li>
+                <li><b>Son ödeme miktari:</b> @order.Debt.LastPaymentAmount.ToString("C")</li>
             </ul>
         }
 
         @if (order.PaymentHistory is not null && order.PaymentHistory.Any())
         {
-            <h4>Payment History</h4>
+            <h4>Ödeme geçmişi</h4>
             <table style="width: 100%; border-collapse: collapse;">
                 <thead>
                     <tr style="background-color: #0078d4; color: white;">
-                        <th style="padding: 10px; border: 1px solid #ccc;">Date</th>
-                        <th style="padding: 10px; border: 1px solid #ccc;">Amount</th>
+                        <th style="padding: 10px; border: 1px solid #ccc;">Tarih</th>
+                        <th style="padding: 10px; border: 1px solid #ccc;">Miktar</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -66,7 +65,7 @@ else
         }
         else
         {
-            <p>No payment history available.</p>
+            <p>Ödeme geçmişi mevcut değil.</p>
         }
     </div>
 }

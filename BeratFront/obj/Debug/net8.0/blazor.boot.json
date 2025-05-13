@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "BeratFront",
   "resources": {
-    "hash": "sha256-cdq1Wzhmwe+mHy6blw1Wv6sN4ZTcUhwDvcu5TdbnT68=",
+    "hash": "sha256-NBFhpKYJndmFQpqyxP+gmcRp588u6TSZkLXmgb385tQ=",
     "jsModuleNative": {
       "dotnet.native.8.0.15.xgcpb357yg.js": "sha256-ftpNqtARtVNE8ku5eB/jXoklb41UQ+EutUHfwmbNTBY="
     },
@@ -208,10 +208,10 @@
       "mscorlib.wasm": "sha256-BeLfFpg9iS3DkEdywsYY7sV6ML3knqkMaMq0JBEbWlw=",
       "netstandard.wasm": "sha256-VkjUtJ6DK5bFTc2JwwGHmQY3tBcNSC7zMSJXuiXcnJA=",
       "System.Private.CoreLib.wasm": "sha256-VIQEPUSb48N39LR+ncGDP5xU02xuRbyZU8MhMho26wQ=",
-      "BeratFront.wasm": "sha256-8XM0gkM+yIMnyd4vf4U/zdnZ723xdXFLYlew+z2XG4w="
+      "BeratFront.wasm": "sha256-af/5iNOcRhmkhslPgczHZmLse5SVZbfQ+FKeH9viwKg="
     },
     "pdb": {
-      "BeratFront.pdb": "sha256-xuYdi0b5RIujg3hcBnedWjtoXnOZiH2RmDGmb92fFkE="
+      "BeratFront.pdb": "sha256-Eu2rTRKImojH/gCG/JE1lIkdfqp0zcarAtqeuDbz1jw="
     }
   },
   "cacheBootResources": true,

@@ -2,7 +2,7 @@
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 
-<h3 style="text-align:center; margin-top: 20px;">Manage Orders</h3>
+<h3 style="text-align:center; margin-top: 20px;">Siparişleri yönet</h3>
 
 <style>
     #blazor-error-ui {
@@ -99,7 +99,7 @@
 </style>
 
 <div class="search-container">
-    <InputText @bind-Value="searchTerm" placeholder="Search by customer or product..." />
+    <InputText @bind-Value="searchTerm" placeholder="Müşteri veya ürün bilgisi ara..." />
     <button @onclick="FilterOrders">Ara</button>
 </div>
 
@@ -114,11 +114,11 @@
 
 @if (filteredOrders is null)
 {
-<p style="text-align:center;">Loading orders...</p>
+<p style="text-align:center;">Siparişler yükleniyor...</p>
 }
 else if (!filteredOrders.Any())
 {
-<p style="text-align:center;">No orders found.</p>
+<p style="text-align:center;">Sipariş bulunamadı</p>
 }
 else
 {
