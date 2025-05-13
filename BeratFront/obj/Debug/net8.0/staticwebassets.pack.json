@@ -9,6 +9,10 @@
       "PackagePath": "staticwebassets\\_framework\\blazor.webassembly.js.gz"
     },
     {
+      "Id": "C:\\Users\\User\\Documents\\GitHub\\MagazineFront\\BeratFront\\wwwroot\\BeratFront.styles.css",
+      "PackagePath": "staticwebassets\\BeratFront.styles.css"
+    },
+    {
       "Id": "C:\\Users\\User\\Documents\\GitHub\\MagazineFront\\BeratFront\\wwwroot\\css\\app.css",
       "PackagePath": "staticwebassets\\css\\app.css"
     },

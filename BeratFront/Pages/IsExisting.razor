@@ -2,6 +2,10 @@
 @inject NavigationManager NavigationManager
 
 <style>
+    #blazor-error-ui {
+        display: none;
+    }
+
     html, body {
         margin: 0;
         padding: 0;
@@ -35,10 +39,10 @@
 
 <div class="vertical-grid">
     <div class="half-tile" @onclick="NavigateToAddClient">
-        New Client
+        Yeni müşteri
     </div>
     <div class="half-tile" @onclick="NavigateToFindClient">
-        Old Client
+        Kayıtlı müşteri
     </div>
 </div>
 

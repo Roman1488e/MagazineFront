@@ -5,9 +5,13 @@
 @inject HttpClient Client
 @inject NavigationManager NavManager
 
-<h3 style="text-align:center; margin-top: 20px;">Create New Client</h3>
+<h3 style="text-align:center; margin-top: 20px;">Yeni müşteri oluştur</h3>
 
 <style>
+    #blazor-error-ui {
+        display: none;
+    }
+
     .form-container {
         max-width: 500px;
         margin: 40px auto;
@@ -63,35 +67,35 @@
 
     <div class="form-container">
         <div class="form-group">
-            <label>Name</label>
+            <label>Ad</label>
             <InputText @bind-Value="model.Name" />
             <ValidationMessage For="@(() => model.Name)" class="validation-message" />
         </div>
 
         <div class="form-group">
-            <label>Surname</label>
+            <label>Soyad</label>
             <InputText @bind-Value="model.Surname" />
         </div>
 
         <div class="form-group">
-            <label>Contact Number</label>
+            <label>Telefon numarası</label>
             <InputText @bind-Value="model.ContactNumber" />
             <ValidationMessage For="@(() => model.ContactNumber)" class="validation-message" />
         </div>
 
         <div class="form-group">
-            <label>Government ID</label>
+            <label>TC kimlik numaras</label>
             <InputText @bind-Value="model.GovernmentId" />
             <ValidationMessage For="@(() => model.GovernmentId)" class="validation-message" />
         </div>
 
         <div class="form-group">
-            <label>Address</label>
+            <label>Adres</label>
             <InputText @bind-Value="model.Address" />
             <ValidationMessage For="@(() => model.Address)" class="validation-message" />
         </div>
 
-        <button type="submit" class="submit-button">Submit</button>
+        <button type="submit" class="submit-button">Tamam</button>
     </div>
 </EditForm>
 

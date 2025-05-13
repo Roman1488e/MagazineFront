@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "NnaTyultAHRvKrehVyCgY+wOjoTgzlVj8Q13RO1BA5I=",
+  "Hash": "E3IXEaKab+kQimQ38dnYDQtOyMN43cqJEg8Qf0/crq8=",
   "Source": "BeratFront",
   "BasePath": "/",
   "Mode": "Root",
@@ -7767,6 +7767,25 @@
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
       "OriginalItemSpec": "C:\\Users\\User\\Documents\\GitHub\\MagazineFront\\BeratFront\\bin\\Debug\\net8.0\\wwwroot\\_framework\\System.Security.Claims.wasm"
+    },
+    {
+      "Identity": "C:\\Users\\User\\Documents\\GitHub\\MagazineFront\\BeratFront\\wwwroot\\BeratFront.styles.css",
+      "SourceId": "BeratFront",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\User\\Documents\\GitHub\\MagazineFront\\BeratFront\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "BeratFront.styles.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\BeratFront.styles.css"
     },
     {
       "Identity": "C:\\Users\\User\\Documents\\GitHub\\MagazineFront\\BeratFront\\wwwroot\\css\\app.css",

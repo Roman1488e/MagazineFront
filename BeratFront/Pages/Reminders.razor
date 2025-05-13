@@ -1,0 +1,160 @@
+﻿@page "/reminders"
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+<h2 style="text-align:center; margin-top: 20px;">🔔 Reminders</h2>
+
+<div style="width: 90%; margin: auto; font-family: sans-serif;">
+    @if (orderReminders is not null && orderReminders.Any())
+    {
+        <h3>Order Reminders</h3>
+        <table class="reminder-table">
+            <thead>
+                <tr>
+                    <th>Order №</th>
+                    <th>Reminder Date</th>
+                    <th>Client</th>
+                    <th>Phone</th>
+                    <th>Product</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in orderReminders)
+                {
+                    <tr>
+                        <td>@r.OrderNumber</td>
+                        <td>@r.ReminderDate?.ToString("dd.MM.yyyy HH:mm")</td>
+                        <td>@r.ClientsFullName</td>
+                        <td>@r.ClientsNumber</td>
+                        <td>@r.ProductName</td>
+                        <td>
+                            <button class="done-button" @onclick="() => MarkAsChecked(r.OrderId)">Done</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p style="color: gray;">Нет напоминаний по заказам.</p>
+    }
+
+    @if (debtReminders is not null && debtReminders.Any())
+    {
+        <h3 style="margin-top:40px;">Debt Payment Reminders</h3>
+        <table class="reminder-table">
+            <thead>
+                <tr>
+                    <th>Client</th>
+                    <th>Phone</th>
+                    <th>Amount</th>
+                    <th>Last Payment</th>
+                    <th>Last Payment Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var d in debtReminders)
+                {
+                    <tr>
+                        <td>@d.ClientFullName</td>
+                        <td>@d.ContactNum</td>
+                        <td>@d.Amount.ToString("C")</td>
+                        <td>@d.LastPaymentAmount.ToString("C")</td>
+                        <td>@d.LastPaymentDate.ToString("dd.MM.yyyy")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p style="color: gray;">Нет напоминаний по долгам.</p>
+    }
+</div>
+
+<style>
+    #blazor-error-ui {
+        display: none;
+    }
+
+    .reminder-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 30px;
+    }
+
+    .reminder-table th,
+    .reminder-table td {
+        border: 1px solid #ccc;
+        padding: 8px 12px;
+        text-align: left;
+    }
+
+    .reminder-table th {
+        background-color: #f5f5f5;
+    }
+
+    .done-button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .done-button:hover {
+        background-color: #218838;
+    }
+</style>
+
+@code {
+    private List<ReminderDto>? orderReminders;
+    private List<DebtPaymentReminderDto>? debtReminders;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            orderReminders = await Http.GetFromJsonAsync<List<ReminderDto>>("api/order/reminders");
+        }
+        catch { orderReminders = new(); }
+
+        try
+        {
+            debtReminders = await Http.GetFromJsonAsync<List<DebtPaymentReminderDto>>("api/debt/reminders");
+        }
+        catch { debtReminders = new(); }
+    }
+
+    private async Task MarkAsChecked(Guid orderId)
+    {
+        var response = await Http.PutAsync($"api/order/{orderId}/markaschecked", null);
+        if (response.IsSuccessStatusCode)
+        {
+            orderReminders = orderReminders?.Where(r => r.OrderId != orderId).ToList();
+            StateHasChanged();
+        }
+    }
+
+    public class ReminderDto
+    {
+        public Guid OrderId { get; set; }
+        public DateTime? ReminderDate { get; set; }
+        public int OrderNumber { get; set; }
+        public string ClientsFullName { get; set; }
+        public string? ClientsNumber { get; set; }
+        public string ProductName { get; set; }
+    }
+
+    public class DebtPaymentReminderDto
+    {
+        public decimal Amount { get; set; }
+        public DateTime LastPaymentDate { get; set; }
+        public string ClientFullName { get; set; }
+        public string? ContactNum { get; set; }
+        public decimal LastPaymentAmount { get; set; }
+    }
+}

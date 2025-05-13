@@ -5,6 +5,10 @@
 <h3 style="text-align:center; margin-top: 20px;">Manage Orders</h3>
 
 <style>
+    #blazor-error-ui {
+        display: none;
+    }
+
     .search-container {
         max-width: 600px;
         margin: 20px auto;
@@ -96,7 +100,7 @@
 
 <div class="search-container">
     <InputText @bind-Value="searchTerm" placeholder="Search by customer or product..." />
-    <button @onclick="FilterOrders">Search</button>
+    <button @onclick="FilterOrders">Ara</button>
 </div>
 
 @if (showSuccessMessage)
@@ -121,16 +125,16 @@ else
 <table>
     <thead>
     <tr>
-        <th>Order #</th>
-        <th>Product</th>
-        <th>Customer</th>
-        <th>Paid</th>
-        <th>Reminder</th>
-        <th>Date</th>
-        <th>Total</th>
-        <th>Paid</th>
-        <th>Details</th>
-        <th>Pay</th>
+        <th>Sipariş numarası</th>
+        <th>Ürün</th>
+        <th>Müşteri</th>
+        <th>Ödeme</th>
+        <th>Hatırlatıcı</th>
+        <th>Tarih</th>
+        <th>Toplam</th>
+        <th>Ödenen</th>
+        <th>Detaylar</th>
+        <th>Ödeme</th>
     </tr>
     </thead>
     <tbody>
@@ -146,18 +150,18 @@ else
         <td>@order.TotalPrice.ToString("C")</td>
         <td>@order.PaidAmount.ToString("C")</td>
         <td>
-            <button class="details-button" @onclick="() => ViewDetails(order.OrderId)">Details</button>
+            <button class="details-button" @onclick="() => ViewDetails(order.OrderId)">Detaylar</button>
         </td>
         <td>
             @if (order.Debt != null && !order.IsPaid)
             {
             <InputNumber @bind-Value="order.PayAmount" class="pay-input" />
-            <button class="pay-button" @onclick="() => PayDebt(order)">Pay</button>
-            <button class="pay-button" @onclick="() => PayDebt(order, true)">Pay All</button>
+            <button class="pay-button" @onclick="() => PayDebt(order)">Öde</button>
+            <button class="pay-button" @onclick="() => PayDebt(order, true)">Hepsini öde</button>
             }
             else
             {
-            <span style="color: gray;">No Debt</span>
+            <span style="color: gray;">Öde</span>
             }
         </td>
     </tr>
@@ -224,20 +228,20 @@ decimal amountToPay = payAll ? order.Debt.Amount : order.PayAmount;
 
 if (amountToPay <= 0)
 {
-ShowError("Сумма оплаты должна быть больше 0.");
+ShowError("Ödemenin 0'dan büyük olması gerekiyor.");
 return;
 }
 
 if (amountToPay > order.Debt.Amount)
 {
-ShowError($"Нельзя оплатить больше чем долг: {order.Debt.Amount.ToString("C")}");
+ShowError($"Ödeme, borçtan fazla olamaz: {order.Debt.Amount.ToString("C")}");
 return;
 }
 
 var response = await Http.PutAsync($"api/debt/{order.Debt.Id}/payfordebt?amount={amountToPay}", null);
 if (response.IsSuccessStatusCode)
 {
-successMessage = $"Оплата {amountToPay.ToString("C")} прошла успешно!";
+successMessage = $"{amountToPay.ToString("C")} ödemesi başarıyla gerçekleştirildi!";
 showSuccessMessage = true;
 showErrorMessage = false;
 StateHasChanged();

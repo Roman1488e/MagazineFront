@@ -1,103 +1,118 @@
 ﻿@page "/"
-@inject HttpClient Http
 @inject NavigationManager NavigationManager
 
-@if (reminders?.Any() == true)
-{
-    <div class="reminder-popup">
-        <h4>🔔 Напоминания:</h4>
-        <ul>
-            @foreach (var reminder in reminders)
-            {
-                <li>
-                    Заказ №@reminder.OrderNumber — @reminder.ReminderDate?.ToString("dd.MM.yyyy HH:mm")
-                    <button @onclick="() => NavigateToOrder(reminder.OrderId)">Открыть</button>
-                </li>
-            }
-        </ul>
-    </div>
-}
-
-<div class="fullscreen-grid">
+<div class="grid-layout">
     <div class="tile" @onclick="NavigateToCreateOrder">
         <span class="icon">➕</span>
-        <span>New Order</span>
+        <span class="label">Yeni sipariş</span>
     </div>
     <div class="tile" @onclick="NavigateToStatistics">
         <span class="icon">📊</span>
-        <span>Statistics</span>
+        <span class="label">İstatistikler</span>
     </div>
     <div class="tile" @onclick="NavigateToManage">
         <span class="icon">💰</span>
-        <span>Manage Data</span>
+        <span class="label">Yönetim</span>
     </div>
     <div class="tile" @onclick="NavigateToSearch">
         <span class="icon">🔍</span>
-        <span>Search</span>
+        <span class="label">Müşteri arama</span>
+    </div>
+    <div class="tile" @onclick="NavigateToReminders">
+        <span class="icon">🔔</span>
+        <span class="label">Hatırlatıcılar</span>
     </div>
 </div>
 
 <style>
-    .reminder-popup {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background-color: #fff3cd;
-        color: #856404;
-        border: 1px solid #ffeeba;
-        padding: 15px;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        z-index: 9999;
+    #blazor-error-ui {
+        display: none;
     }
 
-    .reminder-popup h4 {
-        margin-top: 0;
+    html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        font-family: 'Segoe UI', sans-serif;
     }
 
-    .reminder-popup ul {
-        list-style: none;
-        padding-left: 0;
+    .grid-layout {
+        display: grid;
+        height: 100vh;
+        grid-template-columns: repeat(6, 1fr);
+        grid-template-rows: 1fr 1fr;
     }
 
-    .reminder-popup li {
-        margin-bottom: 10px;
+    .grid-layout > .tile:nth-child(1) {
+        grid-column: 1 / 4; /* 3/6 = 50% */
+        grid-row: 1;
     }
 
-    .reminder-popup button {
-        margin-left: 10px;
-        padding: 4px 8px;
-        font-size: 14px;
+    .grid-layout > .tile:nth-child(2) {
+        grid-column: 4 / 7; /* 3/6 = 50% */
+        grid-row: 1;
     }
 
-    /* остальной CSS без изменений */
+    .grid-layout > .tile:nth-child(3) {
+        grid-column: 1 / 3; /* 2/6 = ~33.33% */
+        grid-row: 2;
+    }
+
+    .grid-layout > .tile:nth-child(4) {
+        grid-column: 3 / 5;
+        grid-row: 2;
+    }
+
+    .grid-layout > .tile:nth-child(5) {
+        grid-column: 5 / 7;
+        grid-row: 2;
+    }
+
+    .tile {
+        background-color: #007bff;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        font-size: 18px;
+        cursor: pointer;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        transition: transform 0.2s, box-shadow 0.2s;
+        border: 1px solid #dbe3f5;
+        animation: fadeInUp 0.6s ease forwards;
+    }
+
+    .tile:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .icon {
+        font-size: 40px;
+        margin-bottom: 12px;
+    }
+
+    .label {
+        font-weight: bold;
+    }
+
+    @@keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 </style>
 
 @code {
-    private List<ReminderDto>? reminders;
-
-    protected override async Task OnInitializedAsync()
-    {
-        try
-        {
-            reminders = await Http.GetFromJsonAsync<List<ReminderDto>>("api/order/reminders");
-        }
-        catch
-        {
-            // Обработка ошибок при запросе
-        }
-    }
-
-    void NavigateToCreateOrder() => NavigationManager.NavigateTo("/clients");
-    void NavigateToStatistics() => NavigationManager.NavigateTo("/statistics");
-    void NavigateToManage() => NavigationManager.NavigateTo("/managedata");
-    void NavigateToSearch() => NavigationManager.NavigateTo("/search");
-    void NavigateToOrder(Guid orderId) => NavigationManager.NavigateTo($"/orders/detail/{orderId}");
-
-    public class ReminderDto
-    {
-        public Guid OrderId { get; set; }
-        public DateTime? ReminderDate { get; set; }
-        public int OrderNumber { get; set; }
-    }
+void NavigateToCreateOrder() => NavigationManager.NavigateTo("/clients");
+void NavigateToStatistics() => NavigationManager.NavigateTo("/statistics");
+void NavigateToManage() => NavigationManager.NavigateTo("/managedata");
+void NavigateToSearch() => NavigationManager.NavigateTo("/search");
+void NavigateToReminders() => NavigationManager.NavigateTo("/reminders");
 }

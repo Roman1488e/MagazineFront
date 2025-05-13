@@ -2,9 +2,13 @@
 @inject HttpClient Http
 @inject NavigationManager Navigation
 
-<h3 style="text-align:center; margin-top: 20px;">Search by GovId or Full Name</h3>
+<h3 style="text-align:center; margin-top: 20px;">Müşteri ara</h3>
 
 <style>
+    #blazor-error-ui {
+        display: none;
+    }
+
     .search-container {
         max-width: 600px;
         margin: 30px auto;
@@ -80,13 +84,12 @@
 </style>
 
 <div class="search-container">
-    <InputText @bind-Value="searchTerm" placeholder="Enter GovId or Full Name" />
+    <InputText @bind-Value="searchTerm" placeholder="Müşteri bilgisi giriniz" />
     <select @bind="isDesc">
         <option value="true">Recently registered</option>
         <option value="false">Old registered</option>
     </select>
-    <div class="hint">You can enter part of the name or ID — full input is not required.</div>
-    <button @onclick="SearchClients">Search</button>
+    <button @onclick="SearchClients">Ara</button>
 </div>
 
 @if (clients is not null && clients.Any())
@@ -94,12 +97,12 @@
 <table>
     <thead>
     <tr>
-        <th>Name</th>
-        <th>Surname</th>
-        <th>Contact Number</th>
-        <th>Government ID</th>
-        <th>Address</th>
-        <th>Action</th>
+        <th>Ad</th>
+        <th>Soyad</th>
+        <th>Telefon numarası</th>
+        <th>TC kimlik numarası</th>
+        <th>Adres</th>
+        <th>Eylem</th>
     </tr>
     </thead>
     <tbody>
@@ -113,7 +116,7 @@
         <td>@client.Address</td>
         <td>
             <button class="add-order-button" @onclick="() => NavigateToCreateOrder(client.Id)">
-                Add Order
+                Sipariş ekle
             </button>
         </td>
     </tr>
@@ -127,33 +130,42 @@ else if (clients is not null)
 }
 
 @code {
-private string searchTerm = string.Empty;
-private bool isDesc = true;
-private List<ClientModel>? clients;
+    private string searchTerm = string.Empty;
+    private bool isDesc = true;
+    private List<ClientModel>? allClients;
+    private List<ClientModel>? clients;
 
-private async Task SearchClients()
-{
-if (string.IsNullOrWhiteSpace(searchTerm))
-{
-clients = new List<ClientModel>();
-return;
+    protected override async Task OnInitializedAsync()
+    {
+        allClients = await Http.GetFromJsonAsync<List<ClientModel>>($"/api/clients");
+        clients = new List<ClientModel>(allClients);
+    }
+
+    private async Task SearchClients()
+    {
+        if (string.IsNullOrWhiteSpace(searchTerm))
+        {
+            // Если строка поиска пустая — показываем всех
+            clients = new List<ClientModel>(allClients ?? new());
+            return;
+        }
+
+        clients = await Http.GetFromJsonAsync<List<ClientModel>>($"/api/clients/search/{searchTerm}/{isDesc}");
+    }
+
+    private void NavigateToCreateOrder(Guid clientId)
+    {
+        Navigation.NavigateTo($"/createorder/{clientId}");
+    }
+
+    public class ClientModel
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public string? Surname { get; set; }
+        public string? ContactNamber { get; set; }
+        public string GovernmentId { get; set; }
+        public string Address { get; set; }
+    }
 }
 
-clients = await Http.GetFromJsonAsync<List<ClientModel>>($"/api/clients/search/{searchTerm}/{isDesc}");
-}
-
-private void NavigateToCreateOrder(Guid clientId)
-{
-Navigation.NavigateTo($"/createorder/{clientId}");
-}
-
-public class ClientModel
-{
-public Guid Id { get; set; }
-public string Name { get; set; }
-public string? Surname { get; set; }
-public string? ContactNamber { get; set; }
-public string GovernmentId { get; set; }
-public string Address { get; set; }
-}
-}

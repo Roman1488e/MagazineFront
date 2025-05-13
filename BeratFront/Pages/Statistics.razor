@@ -1,16 +1,16 @@
 @page "/statistics"
 @inject HttpClient Http
 
-<h3 style="text-align:center; margin-top: 20px;">📊 Payment Statistics</h3>
+<h3 style="text-align:center; margin-top: 20px;">📊 İstatistikler</h3>
 
 @if (paymentStatistic == null || generalStatistic == null || debtStatistic == null)
 {
-    <p style="text-align:center;">Loading...</p>
+    <p style="text-align:center;">Yükleniyor...</p>
 }
 else
 {
     <div style="text-align:center; margin-bottom: 30px;">
-        <label for="monthSelect">📅 Select Month:</label>
+        <label for="monthSelect">📅 Ay seçiniz:</label>
         <select @bind="selectedMonth" @bind:event="onchange" id="monthSelect" style="margin-left: 10px; padding: 5px;">
             @foreach (var m in paymentStatistic.MounthEarnings.OrderByDescending(m => m.Year).ThenByDescending(m => m.Month))
             {
@@ -22,22 +22,21 @@ else
     @if (selectedEarnings != null)
     {
         <div style="text-align:center; font-size: 20px; margin-bottom: 20px;">
-            💰 Earned in @selectedEarnings.MonthName @selectedEarnings.Year: 
+            💰 @selectedEarnings.MonthName @selectedEarnings.Year Ayında kazanılan: 
             <strong>@selectedEarnings.Amount.ToString("C")</strong>
         </div>
     }
 
     <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; margin-top: 20px;">
         <div class="card">
-            <h4>📈 Total Earnings</h4>
+            <h4>📈 Toplam kazanç</h4>
             <p>@paymentStatistic.EarnedForAllTime.ToString("C")</p>
         </div>
 
         <div class="card">
-            <h4>🧾 Active Debts</h4>
+            <h4>🧾 Aktif alacak sayısı</h4>
             <p>@generalStatistic.NotPaidDebts</p>
         </div>
-
         <div class="card">
             <h4>📦 Total Orders</h4>
             <p>@generalStatistic.TotalOrders</p>
@@ -61,6 +60,10 @@ else
 }
 
 <style>
+    #blazor-error-ui {
+        display: none;
+    }
+
     .card {
         padding: 20px;
         border: 1px solid #ccc;
