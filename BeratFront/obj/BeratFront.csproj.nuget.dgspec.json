@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\User\\Documents\\GitHub\\MagazineFront\\BeratFront\\BeratFront.csproj": {}
+    "/home/tryhackme/RiderProjects/MagazineFront/BeratFront/BeratFront.csproj": {}
   },
   "projects": {
-    "C:\\Users\\User\\Documents\\GitHub\\MagazineFront\\BeratFront\\BeratFront.csproj": {
+    "/home/tryhackme/RiderProjects/MagazineFront/BeratFront/BeratFront.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\User\\Documents\\GitHub\\MagazineFront\\BeratFront\\BeratFront.csproj",
+        "projectUniqueName": "/home/tryhackme/RiderProjects/MagazineFront/BeratFront/BeratFront.csproj",
         "projectName": "BeratFront",
-        "projectPath": "C:\\Users\\User\\Documents\\GitHub\\MagazineFront\\BeratFront\\BeratFront.csproj",
-        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\User\\Documents\\GitHub\\MagazineFront\\BeratFront\\obj\\",
+        "projectPath": "/home/tryhackme/RiderProjects/MagazineFront/BeratFront/BeratFront.csproj",
+        "packagesPath": "/home/tryhackme/.nuget/packages/",
+        "outputPath": "/home/tryhackme/RiderProjects/MagazineFront/BeratFront/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/home/tryhackme/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -52,12 +52,6 @@
               "target": "Package",
               "version": "[8.0.15, )"
             },
-            "Microsoft.NET.ILLink.Tasks": {
-              "suppressParent": "All",
-              "target": "Package",
-              "version": "[8.0.15, )",
-              "autoReferenced": true
-            },
             "Microsoft.NET.Sdk.WebAssembly.Pack": {
               "suppressParent": "All",
               "target": "Package",
@@ -87,7 +81,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.408/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.408/PortableRuntimeIdentifierGraph.json"
         }
       },
       "runtimes": {

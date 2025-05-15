@@ -13,87 +13,87 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = browser
 build_property.RootNamespace = BeratFront
 build_property.RootNamespace = BeratFront
-build_property.ProjectDir = C:\Users\User\Documents\GitHub\MagazineFront\BeratFront\
+build_property.ProjectDir = /home/tryhackme/RiderProjects/MagazineFront/BeratFront/
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = false
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\User\Documents\GitHub\MagazineFront\BeratFront
+build_property.MSBuildProjectDirectory = /home/tryhackme/RiderProjects/MagazineFront/BeratFront
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/Users/User/Documents/GitHub/MagazineFront/BeratFront/App.razor]
+[/home/tryhackme/RiderProjects/MagazineFront/BeratFront/App.razor]
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Documents/GitHub/MagazineFront/BeratFront/Pages/AddOrder.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRkT3JkZXIucmF6b3I=
+[/home/tryhackme/RiderProjects/MagazineFront/BeratFront/Pages/AddOrder.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQWRkT3JkZXIucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Documents/GitHub/MagazineFront/BeratFront/Pages/Anvar.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQW52YXIucmF6b3I=
+[/home/tryhackme/RiderProjects/MagazineFront/BeratFront/Pages/Anvar.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQW52YXIucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Documents/GitHub/MagazineFront/BeratFront/Pages/CreateOrder.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ3JlYXRlT3JkZXIucmF6b3I=
+[/home/tryhackme/RiderProjects/MagazineFront/BeratFront/Pages/CreateOrder.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQ3JlYXRlT3JkZXIucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Documents/GitHub/MagazineFront/BeratFront/Pages/DebtDetail.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGVidERldGFpbC5yYXpvcg==
+[/home/tryhackme/RiderProjects/MagazineFront/BeratFront/Pages/DebtDetail.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRGVidERldGFpbC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Documents/GitHub/MagazineFront/BeratFront/Pages/Home.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSG9tZS5yYXpvcg==
+[/home/tryhackme/RiderProjects/MagazineFront/BeratFront/Pages/Home.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvSG9tZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Documents/GitHub/MagazineFront/BeratFront/Pages/IsExisting.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSXNFeGlzdGluZy5yYXpvcg==
+[/home/tryhackme/RiderProjects/MagazineFront/BeratFront/Pages/IsExisting.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvSXNFeGlzdGluZy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Documents/GitHub/MagazineFront/BeratFront/Pages/ManageData.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFuYWdlRGF0YS5yYXpvcg==
+[/home/tryhackme/RiderProjects/MagazineFront/BeratFront/Pages/ManageData.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvTWFuYWdlRGF0YS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Documents/GitHub/MagazineFront/BeratFront/Pages/OrderDetail.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcT3JkZXJEZXRhaWwucmF6b3I=
+[/home/tryhackme/RiderProjects/MagazineFront/BeratFront/Pages/OrderDetail.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvT3JkZXJEZXRhaWwucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Documents/GitHub/MagazineFront/BeratFront/Pages/Reminders.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVtaW5kZXJzLnJhem9y
+[/home/tryhackme/RiderProjects/MagazineFront/BeratFront/Pages/Reminders.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvUmVtaW5kZXJzLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Documents/GitHub/MagazineFront/BeratFront/Pages/Search.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2VhcmNoLnJhem9y
+[/home/tryhackme/RiderProjects/MagazineFront/BeratFront/Pages/Search.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU2VhcmNoLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Documents/GitHub/MagazineFront/BeratFront/Pages/SearchingClient.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2VhcmNoaW5nQ2xpZW50LnJhem9y
+[/home/tryhackme/RiderProjects/MagazineFront/BeratFront/Pages/SearchingClient.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU2VhcmNoaW5nQ2xpZW50LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Documents/GitHub/MagazineFront/BeratFront/Pages/Statistics.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3RhdGlzdGljcy5yYXpvcg==
+[/home/tryhackme/RiderProjects/MagazineFront/BeratFront/Pages/Statistics.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU3RhdGlzdGljcy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Documents/GitHub/MagazineFront/BeratFront/Pages/UpdateClientContact.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXBkYXRlQ2xpZW50Q29udGFjdC5yYXpvcg==
+[/home/tryhackme/RiderProjects/MagazineFront/BeratFront/Pages/UpdateClientContact.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvVXBkYXRlQ2xpZW50Q29udGFjdC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Documents/GitHub/MagazineFront/BeratFront/Pages/UpdateClientGenInfo.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXBkYXRlQ2xpZW50R2VuSW5mby5yYXpvcg==
+[/home/tryhackme/RiderProjects/MagazineFront/BeratFront/Pages/UpdateClientGenInfo.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvVXBkYXRlQ2xpZW50R2VuSW5mby5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Documents/GitHub/MagazineFront/BeratFront/Pages/UpdateClientGovId.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXBkYXRlQ2xpZW50R292SWQucmF6b3I=
+[/home/tryhackme/RiderProjects/MagazineFront/BeratFront/Pages/UpdateClientGovId.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvVXBkYXRlQ2xpZW50R292SWQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Documents/GitHub/MagazineFront/BeratFront/Pages/UpdateOrder.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXBkYXRlT3JkZXIucmF6b3I=
+[/home/tryhackme/RiderProjects/MagazineFront/BeratFront/Pages/UpdateOrder.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvVXBkYXRlT3JkZXIucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Documents/GitHub/MagazineFront/BeratFront/Pages/СlientDetails.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNc0KFsaWVudERldGFpbHMucmF6b3I=
+[/home/tryhackme/RiderProjects/MagazineFront/BeratFront/Pages/СlientDetails.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMv0KFsaWVudERldGFpbHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Documents/GitHub/MagazineFront/BeratFront/_Imports.razor]
+[/home/tryhackme/RiderProjects/MagazineFront/BeratFront/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
